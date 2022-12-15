@@ -18,12 +18,16 @@ namespace MeetingRoomObserver
 
             builder.Services.AddControllers();
 
+            builder.Services.AddHealthChecks();
+
             AddDependencyInjections(builder.Services);
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
 
+            app.UseRouting();
+            
             app.UseAuthorization();
             
             app.MapPost("/observer", async (context) =>
@@ -34,6 +38,12 @@ namespace MeetingRoomObserver
 
                 var eventHandler = app.Services.GetService<IMeetingMessageHandler>();
                 await eventHandler!.HandleMessage(data);
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/healthz");
+                endpoints.MapHealthChecks("/readiness");
             });
 
             app.Run();
