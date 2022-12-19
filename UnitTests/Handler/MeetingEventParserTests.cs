@@ -73,8 +73,8 @@ namespace MeetingRoomObserverUnitTests.Handler
             Assert.Equal("Koivulaakso Dan /Vänst.", speech.PersonSV);
             Assert.Equal("P", speech.SpeectType);
             Assert.Equal(57, speech.Duration);
-            Assert.Equal("11/12/2019 16.08.46", speech.StartTime.ToString("G"));
-            Assert.Equal("11/12/2019 16.09.43", speech.EndTime.ToString("G"));
+            Assert.Equal(new DateTime(2019, 12, 11, 16, 08, 46).ToString("G"), speech.StartTime.ToString("G"));
+            Assert.Equal(new DateTime(2019, 12, 11, 16, 09, 43).ToString("G"), speech.EndTime.ToString("G"));
         }
 
         [Fact]
@@ -247,7 +247,7 @@ namespace MeetingRoomObserverUnitTests.Handler
             Assert.Equal("Arajärvi Pentti /SDP", personEvent.PersonSV);
             Assert.Equal("28", personEvent.Seat);
             Assert.Equal(3340967002, personEvent.SequenceNumber);
-            Assert.Equal("11/12/2019 16.52.00", personEvent.Timestamp.ToString("G"));
+            Assert.Equal(new DateTime(2019, 12, 11, 16, 52, 00).ToString("G"), personEvent.Timestamp.ToString("G"));
             Assert.Equal("9", result.State!.CaseNumber);
             Assert.Equal("0", result.State.ItemNumber);
         }
