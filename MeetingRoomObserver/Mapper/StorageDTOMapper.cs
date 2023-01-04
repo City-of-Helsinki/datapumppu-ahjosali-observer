@@ -30,7 +30,7 @@ namespace MeetingRoomObserver.Mapper
 
         public List<StorageEventDTO> MapToStorageDTOs(MeetingEventList? meetingEventList)
         {
-            if (meetingEventList == null || string.IsNullOrEmpty(meetingEventList.MeetingID))
+            if (meetingEventList == null || string.IsNullOrEmpty(meetingEventList.MeetingID) || meetingEventList.Events.Count == 0)
             {
                 return new List<StorageEventDTO>();
             }
@@ -43,6 +43,11 @@ namespace MeetingRoomObserver.Mapper
             storageEvents.AddRange(MapInputToOutputDTO<CaseStorageDTO, CaseEventRoomDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<VotingStartedStorageDTO, VotingStartsRoomEventDTO > (mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<VotingEndedStorageDTO, VotingEndsRoomEventDTO>(mapper, meetingEventList.Events));
+
+            if (meetingEventList.AttendeesListRoom != null)
+            {
+                storageEvents.Add(MapAttendees(mapper, meetingEventList.AttendeesListRoom));
+            }
 
             return storageEvents.ToList();
         }
@@ -65,14 +70,37 @@ namespace MeetingRoomObserver.Mapper
                 cfg.CreateMap<MeetingEndsRoomEventDTO, MeetingEndedStorageDTO>()
                     .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId));
 
+                cfg.CreateMap<AttendeesListRoomDTO, AttendeesEventStorageDTO>()
+                    .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
+                    .ForMember(dest => dest.EventType, opt => opt.MapFrom(_ => StorageEventType.Attendees))
+                    .ForMember(dest => dest.MeetingSeats, opt => opt.MapFrom(src => src.Seats))
+                    .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => 0))
+                    .ForMember(dest => dest.Timestamp, opt => opt.MapFrom(_ => DateTime.MinValue));
+
+                cfg.CreateMap<SeatRoomDTO, MeetingSeatStorageDTO>()
+                    .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat))
+                    .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                    .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
+                    .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
+
                 AddVotingStartsEventMapper(cfg);
 
                 AddVotingEndEventMapper(cfg);
-
             });
             config.AssertConfigurationIsValid();
 
             return config.CreateMapper();
+        }
+
+        private string ParseAdditionalInfo(string name)
+        {
+            var parts = name.Split('/', '(', ')');
+            return parts.Length < 2 ? "" : parts[1];
+        }
+
+        private AttendeesEventStorageDTO MapAttendees(IMapper mapper, AttendeesListRoomDTO attendeesListRoomDTO)
+        {
+            return mapper.Map<AttendeesEventStorageDTO>(attendeesListRoomDTO);
         }
 
         private IEnumerable<T1> MapInputToOutputDTO<T1, T2>(IMapper mapper, IEnumerable<EventDTO> values)
@@ -97,16 +125,23 @@ namespace MeetingRoomObserver.Mapper
         {
             mapperConfiguration.CreateMap<VotingEndsRoomEventDTO, VotingEndedStorageDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.Ignore())
-                .ForMember(dest => dest.ForText, opt => opt.MapFrom(src => src.AyeTextFI))
-                .ForMember(dest => dest.ForTitle, opt => opt.MapFrom(src => src.AyeTitleFI))
-                .ForMember(dest => dest.AgainstText, opt => opt.MapFrom(src => src.NayTextFI))
-                .ForMember(dest => dest.AgainstTitle, opt => opt.MapFrom(src => src.NayTitleFI))
+                .ForMember(dest => dest.ForTextFI, opt => opt.MapFrom(src => src.AyeTextFI))
+                .ForMember(dest => dest.ForTitleFI, opt => opt.MapFrom(src => src.AyeTitleFI))
+                .ForMember(dest => dest.AgainstTextFI, opt => opt.MapFrom(src => src.NayTextFI))
+                .ForMember(dest => dest.AgainstTitleFI, opt => opt.MapFrom(src => src.NayTitleFI))
+                .ForMember(dest => dest.ForTextSV, opt => opt.MapFrom(src => src.AyeTextSV))
+                .ForMember(dest => dest.ForTitleSV, opt => opt.MapFrom(src => src.AyeTitleSV))
+                .ForMember(dest => dest.AgainstTextSV, opt => opt.MapFrom(src => src.NayTextSV))
+                .ForMember(dest => dest.AgainstTitleSV, opt => opt.MapFrom(src => src.NayTitleSV))
                 .ForMember(dest => dest.VotesFor, opt => opt.MapFrom(src => src.AyeCount))
                 .ForMember(dest => dest.VotesEmpty, opt => opt.MapFrom(src => src.EmptyCount))
                 .ForMember(dest => dest.VotesAbsent, opt => opt.MapFrom(src => src.AbsentCount))
                 .ForMember(dest => dest.VotesAgainst, opt => opt.MapFrom(src => src.NayCount))
-                .ForMember(dest => dest.VotingTypeText, opt => opt.MapFrom(src => src.VotingTypeTextFI))
+                .ForMember(dest => dest.VotingTypeTextFI, opt => opt.MapFrom(src => src.VotingTypeTextFI))
+                .ForMember(dest => dest.VotingTypeTextSV, opt => opt.MapFrom(src => src.VotingTypeTextSV))
+                .ForMember(dest => dest.VotingNumber, opt => opt.MapFrom(src => src.Number))
                 .ForMember(dest => dest.VotingType, opt => opt.MapFrom(src => _votingTypeMapper.MapToVotingType(src.VotingType)));
+                
 
             mapperConfiguration.CreateMap<VoteRoomDTO, VoteStorageDTO>()
                 .ForMember(dest => dest.VoterName, opt => opt.MapFrom(src => src.NameFI))
