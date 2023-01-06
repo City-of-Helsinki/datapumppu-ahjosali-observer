@@ -98,16 +98,16 @@ namespace MeetingRoomObserverUnitTests.Handler
             var result = parser.ParseJsonMessage(json);
             var speechEvent = result.Events[0] as SpeechStartsRoomEventDTO;
             Assert.NotNull(speechEvent);
-            Assert.Equal(0, speechEvent.SpeachTime);
+            Assert.Equal(0, speechEvent.SpeechTime);
             Assert.Equal("Koivulaakso Dan /Vas.", speechEvent.PersonFI);
             Assert.Equal("Koivulaakso Dan /Vänst.", speechEvent.PersonSV);
-            Assert.Equal(0, speechEvent.SpeachTimer);
+            Assert.Equal(0, speechEvent.SpeechTimer);
             Assert.Equal(16, speechEvent.StartTime.Hour);
             Assert.Equal(8, speechEvent.StartTime.Minute);
             Assert.Equal(46, speechEvent.StartTime.Second);
             Assert.Equal("seis", speechEvent.Direction);
             Assert.Equal("50", speechEvent.Seat);
-            Assert.Equal("P", speechEvent.SpeachType);
+            Assert.Equal("P", speechEvent.SpeechType);
         }
 
         [Fact]

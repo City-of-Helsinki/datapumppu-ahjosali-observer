@@ -11,10 +11,10 @@ namespace MeetingRoomObserver.Handler.DTOs
         public string PersonSV { get; set; } = string.Empty;
 
         [JsonProperty("puheaika")]
-        public int SpeachTime { get; set; }
+        public int SpeechTime { get; set; }
 
         [JsonProperty("puhekello")]
-        public int SpeachTimer { get; set; }
+        public int SpeechTimer { get; set; }
 
         [JsonProperty("alkamisaika")]
         public DateTime StartTime { get; set; }
@@ -26,6 +26,6 @@ namespace MeetingRoomObserver.Handler.DTOs
         public string Seat { get; set; } = string.Empty;
 
         [JsonProperty("pvtyyppi")]
-        public string SpeachType { get; set; } = string.Empty;
+        public string SpeechType { get; set; } = string.Empty;
     }
 }

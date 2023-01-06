@@ -7,25 +7,37 @@
             EventType = StorageClient.StorageEventType.VotingStarted;
         }
 
+        public int VotingNumber { get; set; }
+
         public int VotingType { get; set; }
 
-        public string? VotingTypeText { get; set; }
+        public string? VotingTypeTextFI { get; set; }
 
-        public string? ForText { get; set; }
+        public string? VotingTypeTextSV { get; set; }
 
-        public string? ForTitle { get; set; }
+        public string ForTextFI { get; set; } = string.Empty;
 
-        public string? AgainstText { get; set; }
+        public string ForTextSV { get; set; } = string.Empty;
 
-        public string? AgainstTitle { get; set; }
+        public string ForTitleFI { get; set; } = string.Empty;
 
-        public int? VotesFor { get; set; }
+        public string ForTitleSV { get; set; } = string.Empty;
 
-        public int? VotesAgainst { get; set; }
+        public string AgainstTextFI { get; set; } = string.Empty;
 
-        public int? VotesEmpty { get; set; }
+        public string AgainstTextSV { get; set; } = string.Empty;
 
-        public int? VotesAbsent { get; set; }
+        public string AgainstTitleFI { get; set; } = string.Empty;
+
+        public string AgainstTitleSV { get; set; } = string.Empty;
+
+        public int VotesFor { get; set; }
+
+        public int VotesAgainst { get; set; }
+
+        public int VotesEmpty { get; set; }
+
+        public int VotesAbsent { get; set; }
 
         public List<VoteStorageDTO>? Votes { get; set; }
 
