@@ -18,6 +18,8 @@ namespace MeetingRoomObserver.Mapper
             { EventTypeDTOConstants.MeetingEnds, StorageEventType.MeetingEnded },
             { EventTypeDTOConstants.VotingStarts, StorageEventType.VotingStarted },
             { EventTypeDTOConstants.VotingEnds, StorageEventType.VotingEnded },
+            { EventTypeDTOConstants.FloorReservation, StorageEventType.SpeakingTurnReservation },
+            
         };
 
         public StorageEventType MapToMeetingEventType(string? meetingEventType)

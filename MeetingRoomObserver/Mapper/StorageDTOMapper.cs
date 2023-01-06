@@ -43,6 +43,9 @@ namespace MeetingRoomObserver.Mapper
             storageEvents.AddRange(MapInputToOutputDTO<CaseStorageDTO, CaseEventRoomDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<VotingStartedStorageDTO, VotingStartsRoomEventDTO > (mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<VotingEndedStorageDTO, VotingEndsRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StatementReservationStorageDTO, FloorReservationRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StatementsStorageDTO, SpeechListRoomEventDTO>(mapper, meetingEventList.Events));
+
 
             if (meetingEventList.AttendeesListRoom != null)
             {
@@ -79,8 +82,25 @@ namespace MeetingRoomObserver.Mapper
 
                 cfg.CreateMap<SeatRoomDTO, MeetingSeatStorageDTO>()
                     .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat))
-                    .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                    .ForMember(dest => dest.Person, opt => opt.MapFrom(src => ParsePerson(src.PersonFI)))
                     .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
+                    .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
+
+                cfg.CreateMap<FloorReservationRoomEventDTO, StatementReservationStorageDTO>()
+                    .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
+                    .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat))
+                    .ForMember(dest => dest.Person, opt => opt.MapFrom(src => ParsePerson(src.PersonFI)))
+                    .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
+                    .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
+
+                cfg.CreateMap<SpeechListRoomEventDTO, StatementsStorageDTO>()
+                    .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
+                    .ForMember(dest => dest.SpeakingTurns, opt => opt.MapFrom(src => src.Speeches));
+
+                cfg.CreateMap<SpeechRoomDTO, StatementStorageDTO>()
+                    .ForMember(dest => dest.Person, opt => opt.MapFrom(src => ParsePerson(src.PersonFI)))
+                    .ForMember(dest => dest.SpeechType, opt => opt.MapFrom(src => src.SpeectType.ToUpper() == "P" ? 1 : 0))
+                    .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))                    
                     .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
 
                 AddVotingStartsEventMapper(cfg);
@@ -90,6 +110,17 @@ namespace MeetingRoomObserver.Mapper
             config.AssertConfigurationIsValid();
 
             return config.CreateMapper();
+        }
+
+        private string ParsePerson(string person)
+        {
+            var name = person.Split('/', '(')[0];
+            if (string.IsNullOrEmpty(name))
+            {
+                return string.Empty;
+            }
+
+            return name.Trim();
         }
 
         private string ParseAdditionalInfo(string name)

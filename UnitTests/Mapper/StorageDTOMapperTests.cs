@@ -47,8 +47,6 @@ namespace UnitTests.Mapper
 
             var result = storageMapper.MapToStorageDTOs(meetingEventList);
 
-            Assert.Single(result);
-
             var resultEvent = result[0] as CaseStorageDTO;
             Assert.NotNull(resultEvent);
             Assert.Equal("Prop FI", resultEvent.PropositionFI);
@@ -88,13 +86,128 @@ namespace UnitTests.Mapper
 
             var result = storageMapper.MapToStorageDTOs(meetingEventList);
 
-            Assert.Single(result);
-
             var resultEvent = result[0] as MeetingStartedStorageDTO;
             Assert.NotNull(resultEvent);
             Assert.Equal("Fin Title", resultEvent.MeetingTitleFI);
             Assert.Equal("Sv Title", resultEvent.MeetingTitleSV);
             Assert.Equal("test", resultEvent.MeetingID);
         }
+
+        [Fact]
+        public void FloorReservationEvent()
+        {
+            var eventTypeMapper = new Mock<IMeetingEventTypeMapper>();
+            var voteTypeMapper = new Mock<IVoteTypeMapper>();
+            var votingTypeMapper = new Mock<IVotingTypeMapper>();
+            var storageMapper = new StorageDTOMapper(
+                eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object);
+
+            var meetingEventList = new MeetingEventList
+            {
+                State = new StateQueryDTO
+                {
+                    MeetingTitleFI = "Fin Title",
+                    MeetingTitleSV = "Sv Title"
+                },
+                Events = new List<EventDTO>
+                {
+                    new FloorReservationRoomEventDTO
+                    {
+                        EventType = EventTypeDTOConstants.FloorReservation,
+                        SequenceNumber = 1,
+                        Timestamp= DateTime.Now,
+                        Ordinal = 64,
+                        PersonFI = "Kalle /SDP",
+                        PersonSV = "Kalle (pormestari)"
+                    }
+                },
+                MeetingID = "test",
+            };
+
+            var result = storageMapper.MapToStorageDTOs(meetingEventList);
+
+            var resultEvent = result[0] as StatementReservationStorageDTO;
+            Assert.NotNull(resultEvent);
+            Assert.Equal("test", resultEvent.MeetingID);
+            Assert.Equal("Kalle", resultEvent.Person);
+            Assert.Equal("SDP", resultEvent.AdditionalInfoFI);
+            Assert.Equal("pormestari", resultEvent.AdditionalInfoSV);
+            Assert.Equal(64, resultEvent.Ordinal);
+        }
+
+        [Fact]
+        public void StatementListEvent()
+        {
+            var eventTypeMapper = new Mock<IMeetingEventTypeMapper>();
+            var voteTypeMapper = new Mock<IVoteTypeMapper>();
+            var votingTypeMapper = new Mock<IVotingTypeMapper>();
+            var storageMapper = new StorageDTOMapper(
+                eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object);
+
+            var startTime = DateTime.Now;
+            var endTime = DateTime.Now.AddDays(1);
+            var speechList = new List<SpeechRoomDTO>
+            {
+                new SpeechRoomDTO
+                {
+                     Duration = 64,
+                     EndTime = endTime,
+                     StartTime = startTime,
+                     PersonFI = "Kalle (pormestari)",
+                     PersonSV = "Kalle /RKP",
+                     SpeectType = "P"
+                },
+                                new SpeechRoomDTO
+                {
+                     Duration = 65,
+                     EndTime = endTime,
+                     StartTime = startTime,
+                     PersonFI = "Kalle (pormestari)",
+                     PersonSV = "Kalle /RKP",
+                     SpeectType = "V"
+                }
+            };
+
+            var meetingEventList = new MeetingEventList
+            {
+                State = new StateQueryDTO
+                {
+                    MeetingTitleFI = "Fin Title",
+                    MeetingTitleSV = "Sv Title"
+                },
+                Events = new List<EventDTO>
+                {
+                    new SpeechListRoomEventDTO
+                    {
+                        EventType = EventTypeDTOConstants.Speeches,
+                        SequenceNumber = 1,
+                        Timestamp= DateTime.Now,
+                        Speeches = speechList.ToArray()
+                    }
+                },
+                MeetingID = "test",
+            };
+
+            var result = storageMapper.MapToStorageDTOs(meetingEventList);
+
+            var resultEvent = result[0] as StatementsStorageDTO;
+            Assert.NotNull(resultEvent);
+
+            var s1 = resultEvent.SpeakingTurns[0];
+            Assert.Equal("test", resultEvent.MeetingID);
+            Assert.Equal("Kalle", s1.Person);
+            Assert.Equal("pormestari", s1.AdditionalInfoFI);
+            Assert.Equal("RKP", s1.AdditionalInfoSV);
+            Assert.Equal(64, s1.Duration);
+            Assert.Equal(1, s1.SpeechType);
+
+            var s2 = resultEvent.SpeakingTurns[1];
+            Assert.Equal("Kalle", s2.Person);
+            Assert.Equal("pormestari", s2.AdditionalInfoFI);
+            Assert.Equal("RKP", s2.AdditionalInfoSV);
+            Assert.Equal(65, s2.Duration);
+            Assert.Equal(0, s2.SpeechType);
+        }
+
     }
 }
