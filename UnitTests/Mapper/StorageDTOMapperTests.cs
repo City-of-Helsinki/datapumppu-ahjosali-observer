@@ -157,7 +157,7 @@ namespace UnitTests.Mapper
                      PersonSV = "Kalle /RKP",
                      SpeectType = "P"
                 },
-                                new SpeechRoomDTO
+                new SpeechRoomDTO
                 {
                      Duration = 65,
                      EndTime = endTime,
@@ -207,6 +207,98 @@ namespace UnitTests.Mapper
             Assert.Equal("RKP", s2.AdditionalInfoSV);
             Assert.Equal(65, s2.Duration);
             Assert.Equal(0, s2.SpeechType);
+        }
+
+        [Fact]
+        public void SpeechTimerEvent()
+        {
+            var eventTypeMapper = new Mock<IMeetingEventTypeMapper>();
+            var voteTypeMapper = new Mock<IVoteTypeMapper>();
+            var votingTypeMapper = new Mock<IVotingTypeMapper>();
+            var storageMapper = new StorageDTOMapper(
+                eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object);
+
+            var startTime = DateTime.Now;
+
+            var timerEvent = new SpeechTimerRoomEventDTO
+            {
+                Direction = "UP",
+                PersonFI = "Kalle /SDP",
+                PersonSV = "Kalle /RKP",
+                Seat = "64",
+                SequenceNumber = 1,
+                SpeechTime = 64,
+                SpeechTimer = 2,
+                Timestamp = startTime
+            };
+
+            var meetingEventList = new MeetingEventList
+            {
+                State = new StateQueryDTO
+                {
+                    MeetingTitleFI = "Fin Title",
+                    MeetingTitleSV = "Sv Title"
+                },
+                Events = new List<EventDTO>
+                {
+                    timerEvent
+                },
+                MeetingID = "test",
+            };
+
+            var result = storageMapper.MapToStorageDTOs(meetingEventList);
+
+            var resultEvent = result[0] as SpeechTimerStorageDTO;
+            Assert.NotNull(resultEvent);
+
+            Assert.Equal("test", resultEvent.MeetingID);
+            Assert.Equal("Kalle", resultEvent.Person);
+            Assert.Equal("SDP", resultEvent.AdditionalInfoFI);
+            Assert.Equal("RKP", resultEvent.AdditionalInfoSV);
+            Assert.Equal("UP", resultEvent.Direction);
+            Assert.Equal(64, resultEvent.DurationSeconds);
+            Assert.Equal(2, resultEvent.SpeechTimer);
+            Assert.Equal("64", resultEvent.SeatID);
+        }
+
+        [Fact]
+        public void RollCallEvent()
+        {
+            var eventTypeMapper = new Mock<IMeetingEventTypeMapper>();
+            var voteTypeMapper = new Mock<IVoteTypeMapper>();
+            var votingTypeMapper = new Mock<IVotingTypeMapper>();
+            var storageMapper = new StorageDTOMapper(
+                eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object);
+
+
+            var rollCallEvent = new RollCallEndsRoomEventDTO
+            {
+                 Absent = 64,
+                 Present = 128,
+            };
+
+            var meetingEventList = new MeetingEventList
+            {
+                State = new StateQueryDTO
+                {
+                    MeetingTitleFI = "Fin Title",
+                    MeetingTitleSV = "Sv Title"
+                },
+                Events = new List<EventDTO>
+                {
+                    rollCallEvent
+                },
+                MeetingID = "test",
+            };
+
+            var result = storageMapper.MapToStorageDTOs(meetingEventList);
+
+            var resultEvent = result[0] as RollCallStorageDTO;
+            Assert.NotNull(resultEvent);
+
+            Assert.Equal("test", resultEvent.MeetingID);
+            Assert.Equal(64, resultEvent.Absent);
+            Assert.Equal(128, resultEvent.Present);
         }
 
     }
