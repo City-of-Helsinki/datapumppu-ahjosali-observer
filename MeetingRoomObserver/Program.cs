@@ -63,7 +63,8 @@ namespace MeetingRoomObserver
             servicess.AddTransient<IStorage, Storage>();
 
             servicess.AddTransient<IStorageServiceBusClient, StorageServiceBusClient>();
-            
+            servicess.AddTransient<IStorageKafkaClient, StorageKafkaClient>();
+
         }
     }
 }

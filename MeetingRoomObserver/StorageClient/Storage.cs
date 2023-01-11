@@ -9,9 +9,9 @@ namespace MeetingRoomObserver.StorageClient
 
     public class Storage : IStorage
     {
-        private readonly IStorageServiceBusClient _busClient;
+        private readonly IStorageKafkaClient _busClient;
 
-        public Storage(IStorageServiceBusClient busClient)
+        public Storage(IStorageKafkaClient busClient)
         {
             _busClient = busClient;
         }
