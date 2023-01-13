@@ -49,7 +49,7 @@ namespace UnitTests.Mapper
 
             Assert.Single(result);
 
-            var resultEvent = result[0] as CaseStorageDTO;
+            var resultEvent = result[0] as StorageCaseEventDTO;
             Assert.NotNull(resultEvent);
             Assert.Equal("Prop FI", resultEvent.PropositionFI);
             Assert.Equal("Prop SV", resultEvent.PropositionSV);
@@ -90,7 +90,7 @@ namespace UnitTests.Mapper
 
             Assert.Single(result);
 
-            var resultEvent = result[0] as MeetingStartedStorageDTO;
+            var resultEvent = result[0] as StorageMeetingStartedEventDTO;
             Assert.NotNull(resultEvent);
             Assert.Equal("Fin Title", resultEvent.MeetingTitleFI);
             Assert.Equal("Sv Title", resultEvent.MeetingTitleSV);

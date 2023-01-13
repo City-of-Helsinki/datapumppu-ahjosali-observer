@@ -1,6 +1,6 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
-    public class VoteStorageDTO
+    public class StorageVoteDTO
     {
         public string? VoterName { get; set; }
 

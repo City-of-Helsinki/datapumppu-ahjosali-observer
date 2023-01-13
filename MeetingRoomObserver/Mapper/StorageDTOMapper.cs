@@ -38,11 +38,11 @@ namespace MeetingRoomObserver.Mapper
             var mapper = CreateMapper(meetingEventList.State!, meetingEventList.MeetingID);
 
             var storageEvents = new List<StorageEventDTO>();
-            storageEvents.AddRange(MapInputToOutputDTO<MeetingStartedStorageDTO, MeetingStartsRoomEventDTO>(mapper, meetingEventList.Events));            
-            storageEvents.AddRange(MapInputToOutputDTO<MeetingEndedStorageDTO, MeetingEndsRoomEventDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<CaseStorageDTO, CaseEventRoomDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<VotingStartedStorageDTO, VotingStartsRoomEventDTO > (mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<VotingEndedStorageDTO, VotingEndsRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageMeetingStartedEventDTO, MeetingStartsRoomEventDTO>(mapper, meetingEventList.Events));            
+            storageEvents.AddRange(MapInputToOutputDTO<StorageMeetingEndedEventDTO, MeetingEndsRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageCaseEventDTO, CaseEventRoomDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageVotingStartedEventDTO, VotingStartsRoomEventDTO > (mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageVotingEndedEventDTO, VotingEndsRoomEventDTO>(mapper, meetingEventList.Events));
 
             if (meetingEventList.AttendeesListRoom != null)
             {
@@ -59,25 +59,25 @@ namespace MeetingRoomObserver.Mapper
                 cfg.CreateMap<string?, StorageEventType>()
                     .ConvertUsing(src => _meetingEventTypeMapper.MapToMeetingEventType(src));
 
-                cfg.CreateMap<MeetingStartsRoomEventDTO, MeetingStartedStorageDTO>()
+                cfg.CreateMap<MeetingStartsRoomEventDTO, StorageMeetingStartedEventDTO>()
                     .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                     .ForMember(dest => dest.MeetingTitleFI, opt => opt.MapFrom(_ => state.MeetingTitleFI))
                     .ForMember(dest => dest.MeetingTitleSV, opt => opt.MapFrom(_ => state.MeetingTitleSV));
 
-                cfg.CreateMap<CaseEventRoomDTO, CaseStorageDTO>()
+                cfg.CreateMap<CaseEventRoomDTO, StorageCaseEventDTO>()
                     .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId));
 
-                cfg.CreateMap<MeetingEndsRoomEventDTO, MeetingEndedStorageDTO>()
+                cfg.CreateMap<MeetingEndsRoomEventDTO, StorageMeetingEndedEventDTO>()
                     .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId));
 
-                cfg.CreateMap<AttendeesListRoomDTO, AttendeesEventStorageDTO>()
+                cfg.CreateMap<AttendeesListRoomDTO, StorageAttendeesEventDTO>()
                     .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                     .ForMember(dest => dest.EventType, opt => opt.MapFrom(_ => StorageEventType.Attendees))
                     .ForMember(dest => dest.MeetingSeats, opt => opt.MapFrom(src => src.Seats))
                     .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => 0))
                     .ForMember(dest => dest.Timestamp, opt => opt.MapFrom(_ => DateTime.MinValue));
 
-                cfg.CreateMap<SeatRoomDTO, MeetingSeatStorageDTO>()
+                cfg.CreateMap<SeatRoomDTO, StorageMeetingSeatDTO>()
                     .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat))
                     .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
                     .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
@@ -98,9 +98,9 @@ namespace MeetingRoomObserver.Mapper
             return parts.Length < 2 ? "" : parts[1];
         }
 
-        private AttendeesEventStorageDTO MapAttendees(IMapper mapper, AttendeesListRoomDTO attendeesListRoomDTO)
+        private StorageAttendeesEventDTO MapAttendees(IMapper mapper, AttendeesListRoomDTO attendeesListRoomDTO)
         {
-            return mapper.Map<AttendeesEventStorageDTO>(attendeesListRoomDTO);
+            return mapper.Map<StorageAttendeesEventDTO>(attendeesListRoomDTO);
         }
 
         private IEnumerable<T1> MapInputToOutputDTO<T1, T2>(IMapper mapper, IEnumerable<EventDTO> values)
@@ -111,7 +111,7 @@ namespace MeetingRoomObserver.Mapper
 
         private void AddVotingStartsEventMapper(IMapperConfigurationExpression mapperConfiguration)
         {
-            mapperConfiguration.CreateMap<VotingStartsRoomEventDTO, VotingStartedStorageDTO>()
+            mapperConfiguration.CreateMap<VotingStartsRoomEventDTO, StorageVotingStartedEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.Ignore())
                 .ForMember(dest => dest.ForText, opt => opt.MapFrom(src => src.AyeTextFI))
                 .ForMember(dest => dest.ForTitle, opt => opt.MapFrom(src => src.AyeTitleFI))
@@ -123,7 +123,7 @@ namespace MeetingRoomObserver.Mapper
 
         private void AddVotingEndEventMapper(IMapperConfigurationExpression mapperConfiguration)
         {
-            mapperConfiguration.CreateMap<VotingEndsRoomEventDTO, VotingEndedStorageDTO>()
+            mapperConfiguration.CreateMap<VotingEndsRoomEventDTO, StorageVotingEndedEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.Ignore())
                 .ForMember(dest => dest.ForTextFI, opt => opt.MapFrom(src => src.AyeTextFI))
                 .ForMember(dest => dest.ForTitleFI, opt => opt.MapFrom(src => src.AyeTitleFI))
@@ -143,7 +143,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.VotingType, opt => opt.MapFrom(src => _votingTypeMapper.MapToVotingType(src.VotingType)));
                 
 
-            mapperConfiguration.CreateMap<VoteRoomDTO, VoteStorageDTO>()
+            mapperConfiguration.CreateMap<VoteRoomDTO, StorageVoteDTO>()
                 .ForMember(dest => dest.VoterName, opt => opt.MapFrom(src => src.NameFI))
                 .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => _voteTypeMapper.MapToVoteType(src.VoteType)));
         }
