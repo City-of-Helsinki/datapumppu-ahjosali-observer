@@ -49,8 +49,9 @@ namespace MeetingRoomObserver.StorageClient
                     BootstrapServers = _configuration["KAFKA_BOOTSTRAP_SERVER"],
                     SaslMechanism = SaslMechanism.ScramSha512,
                     SecurityProtocol = SecurityProtocol.SaslSsl,
-                    SaslUsername = _configuration["KAFKA__USER_USERNAME"],
-                    SaslPassword = _configuration["KAFKA__USER__PASSWORD"],
+                    SaslUsername = _configuration["KAFKA_USER_USERNAME"],
+                    SaslPassword = _configuration["KAFKA_USER_PASSWORD"],
+                    SslCertificatePem = _configuration["SSL_CERT_PEM"]
                 };
             }
         }
