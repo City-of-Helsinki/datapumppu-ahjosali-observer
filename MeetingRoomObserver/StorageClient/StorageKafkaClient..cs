@@ -12,18 +12,19 @@ namespace MeetingRoomObserver.StorageClient
     public class StorageKafkaClient : IStorageKafkaClient
     {
         private readonly IConfiguration _configuration;
-
+        private readonly ILogger<StorageKafkaClient> _logger;
         private IHostEnvironment _hostEnvironment;
 
-        public StorageKafkaClient(IHostEnvironment hostEnvironment, IConfiguration configuration)
+        public StorageKafkaClient(IConfiguration configuration, IHostEnvironment hostEnvironment, ILogger<StorageKafkaClient> logger)
         {
             _configuration = configuration;
-
             _hostEnvironment = hostEnvironment;
+            _logger = logger; 
         }
 
         public Task SendEvent(StorageEventDTO storageEventDTO)
         {
+            _logger.LogInformation("Sending event to Storage");
             var topic = _configuration["KAFKA_TOPIC"];
 
             var producer = CreateKafkaProducer();
