@@ -44,7 +44,6 @@ namespace MeetingRoomObserver.Mapper
             {
                 throw new NotSupportedException("Unknown event type: " + meetingEventType);
             }
-            Console.WriteLine("event type: " + _map[meetingEventType]);
             return _map[meetingEventType];
         }
     }

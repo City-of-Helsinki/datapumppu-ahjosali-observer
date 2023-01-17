@@ -71,7 +71,7 @@ namespace MeetingRoomObserverUnitTests.Handler
             var speech = speechEvent.Speeches[0];
             Assert.Equal("Koivulaakso Dan /Vas.", speech.PersonFI);
             Assert.Equal("Koivulaakso Dan /Vänst.", speech.PersonSV);
-            Assert.Equal("P", speech.SpeectType);
+            Assert.Equal("P", speech.SpeechType);
             Assert.Equal(57, speech.Duration);
             Assert.Equal(new DateTime(2019, 12, 11, 16, 08, 46).ToString("G"), speech.StartTime.ToString("G"));
             Assert.Equal(new DateTime(2019, 12, 11, 16, 09, 43).ToString("G"), speech.EndTime.ToString("G"));

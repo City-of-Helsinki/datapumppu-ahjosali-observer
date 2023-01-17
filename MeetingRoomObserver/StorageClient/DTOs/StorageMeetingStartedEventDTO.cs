@@ -10,7 +10,5 @@
         public string MeetingTitleFI { get; set; }
 
         public string MeetingTitleSV { get; set; }
-
-
     }
 }
