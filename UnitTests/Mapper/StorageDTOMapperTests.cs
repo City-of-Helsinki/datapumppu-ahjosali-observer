@@ -28,7 +28,7 @@ namespace UnitTests.Mapper
                 },
                 Events = new List<EventDTO>
                 {
-                    new CaseEventRoomDTO
+                    new CaseRoomEventDTO
                     {
                         EventType = EventTypeDTOConstants.Case,
                         SequenceNumber = 1,

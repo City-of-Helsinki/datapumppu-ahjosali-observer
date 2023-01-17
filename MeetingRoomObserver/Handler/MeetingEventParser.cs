@@ -16,7 +16,7 @@ namespace MeetingRoomObserver.Handler
         {
             { EventTypeDTOConstants.MeetingStarts, (dynamic o) => o.ToObject<MeetingStartsRoomEventDTO>() },
             { EventTypeDTOConstants.MeetingEnds, (dynamic o) => o.ToObject<MeetingEndsRoomEventDTO>() },
-            { EventTypeDTOConstants.Case, (dynamic o) => o.ToObject<CaseEventRoomDTO>() },
+            { EventTypeDTOConstants.Case, (dynamic o) => o.ToObject<CaseRoomEventDTO>() },
             { EventTypeDTOConstants.RollCallStarts, (dynamic o) => o.ToObject<RollCallStartsRoomEventDTO>() },
             { EventTypeDTOConstants.RollCallEnds, (dynamic o) => o.ToObject<RollCallEndsRoomEventDTO>() },
             { EventTypeDTOConstants.VotingStarts, (dynamic o) => o.ToObject<VotingStartsRoomEventDTO>() },

@@ -14,7 +14,7 @@ namespace MeetingRoomObserver.Handler.DTOs
         public DateTime StartTime { get; set; }
 
         [JsonProperty("tyyppi")]
-        public string SpeectType { get; set; } = string.Empty;
+        public string SpeechType { get; set; } = string.Empty;
 
         [JsonProperty("puheenkesto")]
         public int Duration { get; set; }

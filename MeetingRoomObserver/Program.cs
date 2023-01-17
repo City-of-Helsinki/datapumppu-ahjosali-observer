@@ -57,8 +57,8 @@ namespace MeetingRoomObserver
             servicess.AddTransient<IMeetingEventTypeMapper, MeetingEventTypeMapper>();
             servicess.AddTransient<IVoteTypeMapper, VoteTypeMapper>();
             servicess.AddTransient<IVotingTypeMapper, VotingTypeMapper>();
+            servicess.AddTransient<ISpeechTypeMapper, SpeechTypeMapper>();
             
-
             servicess.AddTransient<IStorageDTOMapper, StorageDTOMapper>();
             servicess.AddTransient<IStorage, Storage>();
 
