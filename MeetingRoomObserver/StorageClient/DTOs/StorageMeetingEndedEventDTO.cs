@@ -1,8 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
-    public class MeetingEndedStorageDTO : StorageEventDTO
+    public class StorageMeetingEndedEventDTO : StorageEventDTO
     {
-        public MeetingEndedStorageDTO()
+        public StorageMeetingEndedEventDTO()
         {
             EventType = StorageClient.StorageEventType.MeetingEnded;
         }

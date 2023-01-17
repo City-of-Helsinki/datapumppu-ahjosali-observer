@@ -71,7 +71,7 @@ namespace MeetingRoomObserverUnitTests.Handler
             var speech = speechEvent.Speeches[0];
             Assert.Equal("Koivulaakso Dan /Vas.", speech.PersonFI);
             Assert.Equal("Koivulaakso Dan /Vänst.", speech.PersonSV);
-            Assert.Equal("P", speech.SpeectType);
+            Assert.Equal("P", speech.SpeechType);
             Assert.Equal(57, speech.Duration);
             Assert.Equal(new DateTime(2019, 12, 11, 16, 08, 46).ToString("G"), speech.StartTime.ToString("G"));
             Assert.Equal(new DateTime(2019, 12, 11, 16, 09, 43).ToString("G"), speech.EndTime.ToString("G"));
@@ -197,7 +197,7 @@ namespace MeetingRoomObserverUnitTests.Handler
             var json = @"{""tapahtumalista"":{""tapahtumat"":[{""laji"":""asia/kohta"",""paatosehdotus_sv"":""Stadsfullmäktige väljer två ledamöter till protokolljusterare och två ledamöter till ersättare för dessa.\n\n"",""asianumero"":""2"",""aikaleima"":""2019-12-11T16:08:09"",""asiateksti"":""Pöytäkirjan tarkastajien valinta"",""snro"":709891002,""asiateksti_sv"":""Val av protokolljusterare"",""paatosehdotus"":""Kaupunginvaltuusto valitsee pöytäkirjantarkastajiksi kaksi valtuutettua ja varatarkastajiksi kaksi valtuutettua.\n\n"",""tunniste"":""2 / Asia"",""kohtanumero"":""0""},{""laji"":""puheenvuorovaraukset tyhjatty"",""aikaleima"":""2019-12-11T16:08:09"",""snro"":709891003},{""laji"":""repliikkivaraukset tyhjatty"",""aikaleima"":""2019-12-11T16:08:09"",""snro"":709891004}],""kokous"":""2019/21 2019-12-11 15:56:19.358""},""versio"":""2"",""tilakysely"":{""kokousotsikko_sv"":""Stadsfullmäktige 21/11.12.2019"",""tapahtumatyyppi"":""KOHDANALKU"",""paatosehdotus_sv"":""Stadsfullmäktige väljer två ledamöter till protokolljusterare och två ledamöter till ersättare för dessa.\n\n"",""asianumero"":""2"",""kokous"":""2019/21 2019-12-11 15:56:19.358"",""asiateksti"":""Pöytäkirjan tarkastajien valinta"",""snro"":709891001,""asiateksti_sv"":""Val av protokolljusterare"",""tila"":""keskustelu"",""paatosehdotus"":""Kaupunginvaltuusto valitsee pöytäkirjantarkastajiksi kaksi valtuutettua ja varatarkastajiksi kaksi valtuutettua.\n\n"",""kohtanumero"":""0"",""kokousotsikko"":""Kaupunginvaltuusto 21/11.12.2019""}}";
             var parser = new MeetingEventParser();
             var result = parser.ParseJsonMessage(json);
-            var caseEvent = result.Events[0] as CaseEventRoomDTO;
+            var caseEvent = result.Events[0] as CaseRoomEventDTO;
             Assert.NotNull(caseEvent);
             Assert.Equal("2", caseEvent.CaseNumber);
             Assert.Equal("0", caseEvent.ItemNumber);
@@ -321,7 +321,7 @@ namespace MeetingRoomObserverUnitTests.Handler
             var json = @"{""tapahtumalista"":{""tapahtumat"":[{""laji"":""asia/kohta"",""paatosehdotus_sv"":""Stadsfullmäktige konstaterar vilka ledamöter som anmält förhinder och vilka ersättare som inträder i deras ställe, förrättar namnupprop och konstaterar att sammanträdet är lagligt och beslutsfört.\n\n"",""asianumero"":""1"",""aikaleima"":""2019-12-11T16:06:06"",""asiateksti"":""Nimenhuuto, laillisuus ja päätösvaltaisuus"",""snro"":587183002,""asiateksti_sv"":""Namnupprop, laglighet och beslutsförhet"",""paatosehdotus"":""Kaupunginvaltuusto toteaa esteen ilmoittaneet valtuutetut ja heidän tilalleen tulevat varavaltuutetut, toimittaa nimenhuudon sekä toteaa kokouksen laillisuuden ja päätösvaltaisuuden.\n\n"",""tunniste"":""1 / Asia"",""kohtanumero"":""0""},{""laji"":""puheenvuorovaraukset tyhjatty"",""aikaleima"":""2019-12-11T16:06:06"",""snro"":587183003},{""laji"":""repliikkivaraukset tyhjatty"",""aikaleima"":""2019-12-11T16:06:06"",""snro"":587183004}],""kokous"":""2019/21 2019-12-11 15:56:19.358""},""versio"":""2"",""tilakysely"":{""kokousotsikko_sv"":""Stadsfullmäktige 21/11.12.2019"",""tapahtumatyyppi"":""KOHDANALKU"",""paatosehdotus_sv"":""Stadsfullmäktige konstaterar vilka ledamöter som anmält förhinder och vilka ersättare som inträder i deras ställe, förrättar namnupprop och konstaterar att sammanträdet är lagligt och beslutsfört.\n\n"",""asianumero"":""1"",""kokous"":""2019/21 2019-12-11 15:56:19.358"",""asiateksti"":""Nimenhuuto, laillisuus ja päätösvaltaisuus"",""snro"":587183001,""asiateksti_sv"":""Namnupprop, laglighet och beslutsförhet"",""tila"":""keskustelu"",""paatosehdotus"":""Kaupunginvaltuusto toteaa esteen ilmoittaneet valtuutetut ja heidän tilalleen tulevat varavaltuutetut, toimittaa nimenhuudon sekä toteaa kokouksen laillisuuden ja päätösvaltaisuuden.\n\n"",""kohtanumero"":""0"",""kokousotsikko"":""Kaupunginvaltuusto 21/11.12.2019""}}";
             var parser = new MeetingEventParser();
             var result = parser.ParseJsonMessage(json);
-            var caseEvent = result.Events[0] as CaseEventRoomDTO;
+            var caseEvent = result.Events[0] as CaseRoomEventDTO;
             Assert.NotNull(caseEvent);
             Assert.Equal("Kaupunginvaltuusto toteaa esteen ilmoittaneet valtuutetut ja heidän tilalleen tulevat varavaltuutetut, toimittaa nimenhuudon sekä toteaa kokouksen laillisuuden ja päätösvaltaisuuden.\n\n", caseEvent.PropositionFI);
             Assert.Equal("Stadsfullmäktige konstaterar vilka ledamöter som anmält förhinder och vilka ersättare som inträder i deras ställe, förrättar namnupprop och konstaterar att sammanträdet är lagligt och beslutsfört.\n\n", caseEvent.PropositionSV);

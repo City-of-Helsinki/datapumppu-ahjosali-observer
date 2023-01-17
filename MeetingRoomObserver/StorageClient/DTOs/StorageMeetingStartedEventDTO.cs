@@ -1,16 +1,14 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
-    public class MeetingStartedStorageDTO : StorageEventDTO
+    public class StorageMeetingStartedEventDTO : StorageEventDTO
     {
-        public MeetingStartedStorageDTO()
+        public StorageMeetingStartedEventDTO()
         {
-            EventType = StorageClient.StorageEventType.MeetingStarted;
+            EventType = StorageEventType.MeetingStarted;
         }
 
         public string MeetingTitleFI { get; set; }
 
         public string MeetingTitleSV { get; set; }
-
-
     }
 }

@@ -18,6 +18,24 @@ namespace MeetingRoomObserver.Mapper
             { EventTypeDTOConstants.MeetingEnds, StorageEventType.MeetingEnded },
             { EventTypeDTOConstants.VotingStarts, StorageEventType.VotingStarted },
             { EventTypeDTOConstants.VotingEnds, StorageEventType.VotingEnded },
+            { EventTypeDTOConstants.Speeches, StorageEventType.SpeakingTurns },
+            { EventTypeDTOConstants.Case, StorageEventType.Case },
+            { EventTypeDTOConstants.RollCallStarts, StorageEventType.RollCallStarted },
+            { EventTypeDTOConstants.RollCallEnds, StorageEventType.RollCallEnded },
+            { EventTypeDTOConstants.FloorReservation, StorageEventType.SpeakingTurnReservation },
+            { EventTypeDTOConstants.FloorReservationsCleared, StorageEventType.SpeakingTurnReservationsEmptied },
+            { EventTypeDTOConstants.SpeechStarts, StorageEventType.SpeakingTurnStarted },
+            { EventTypeDTOConstants.SpeechEnds, StorageEventType.SpeakingTurnEnded },
+            { EventTypeDTOConstants.PersonArrived, StorageEventType.PersonArrived },
+            { EventTypeDTOConstants.PersonLeft, StorageEventType.PersonLeft },
+            { EventTypeDTOConstants.Pause, StorageEventType.Break },
+            { EventTypeDTOConstants.PauseInfo, StorageEventType.BreakNotice },
+            { EventTypeDTOConstants.DiscussionStarts, StorageEventType.DiscussionStarts },
+            { EventTypeDTOConstants.SpeechTimer, StorageEventType.SpeechTimer },
+            { EventTypeDTOConstants.Propositions, StorageEventType.Propositions },
+            { EventTypeDTOConstants.ReplyReservation, StorageEventType.ReplyReservation },
+            { EventTypeDTOConstants.ReplyReservationsCleared, StorageEventType.ReplyReservationsEmptied },
+            { EventTypeDTOConstants.MeetingContinues, StorageEventType.MeetingContinues }
         };
 
         public StorageEventType MapToMeetingEventType(string? meetingEventType)
@@ -26,7 +44,6 @@ namespace MeetingRoomObserver.Mapper
             {
                 throw new NotSupportedException("Unknown event type: " + meetingEventType);
             }
-
             return _map[meetingEventType];
         }
     }

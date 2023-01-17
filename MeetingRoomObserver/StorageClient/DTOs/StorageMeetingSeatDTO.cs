@@ -1,6 +1,6 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
-    public class MeetingSeatStorageDTO
+    public class StorageMeetingSeatDTO
     {
         public string SeatID { get; set; } = string.Empty;
 

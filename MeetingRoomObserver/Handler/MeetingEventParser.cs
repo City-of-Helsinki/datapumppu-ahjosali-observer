@@ -16,7 +16,7 @@ namespace MeetingRoomObserver.Handler
         {
             { EventTypeDTOConstants.MeetingStarts, (dynamic o) => o.ToObject<MeetingStartsRoomEventDTO>() },
             { EventTypeDTOConstants.MeetingEnds, (dynamic o) => o.ToObject<MeetingEndsRoomEventDTO>() },
-            { EventTypeDTOConstants.Case, (dynamic o) => o.ToObject<CaseEventRoomDTO>() },
+            { EventTypeDTOConstants.Case, (dynamic o) => o.ToObject<CaseRoomEventDTO>() },
             { EventTypeDTOConstants.RollCallStarts, (dynamic o) => o.ToObject<RollCallStartsRoomEventDTO>() },
             { EventTypeDTOConstants.RollCallEnds, (dynamic o) => o.ToObject<RollCallEndsRoomEventDTO>() },
             { EventTypeDTOConstants.VotingStarts, (dynamic o) => o.ToObject<VotingStartsRoomEventDTO>() },
@@ -35,7 +35,7 @@ namespace MeetingRoomObserver.Handler
             { EventTypeDTOConstants.Propositions, (dynamic o) => o.ToObject<PropositionsRoomEventDTO>() },
             { EventTypeDTOConstants.Pause, (dynamic o) => o.ToObject<PauseRoomEventDTO>() },
             { EventTypeDTOConstants.PauseInfo, (dynamic o) => o.ToObject<PauseInfoRoomEventDTO>() },
-
+            { EventTypeDTOConstants.MeetingContinues, (dynamic o) => o.ToObject<MeetingContinuesRoomEventDTO>() },
         };
 
         public MeetingEventList ParseJsonMessage(string jsonMessage)

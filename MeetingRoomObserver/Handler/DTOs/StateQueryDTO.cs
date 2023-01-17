@@ -15,5 +15,8 @@ namespace MeetingRoomObserver.Handler.DTOs
 
         [JsonProperty("kohtanumero")]
         public string ItemNumber { get; set; } = string.Empty;
+
+        [JsonProperty("snro")]
+        public long? SequenceNumber { get; set; }
     }
 }

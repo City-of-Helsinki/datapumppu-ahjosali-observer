@@ -23,5 +23,6 @@
         public const string Propositions = "ehdotukset";
         public const string Pause = "tauko";
         public const string PauseInfo = "taukotiedote";
+        public const string MeetingContinues = "kokous jatkuu";
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
-    public class VotingEndedStorageDTO : StorageEventDTO
+    public class StorageVotingEndedEventDTO : StorageEventDTO
     {
-        public VotingEndedStorageDTO()
+        public StorageVotingEndedEventDTO()
         {
-            EventType = StorageClient.StorageEventType.VotingStarted;
+            EventType = StorageEventType.VotingStarted;
         }
 
         public int VotingNumber { get; set; }
@@ -39,7 +39,7 @@
 
         public int VotesAbsent { get; set; }
 
-        public List<VoteStorageDTO>? Votes { get; set; }
+        public List<StorageVoteDTO>? Votes { get; set; }
 
 
     }
