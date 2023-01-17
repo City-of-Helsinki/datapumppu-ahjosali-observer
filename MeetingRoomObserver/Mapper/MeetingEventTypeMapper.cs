@@ -35,8 +35,7 @@ namespace MeetingRoomObserver.Mapper
             { EventTypeDTOConstants.Propositions, StorageEventType.Propositions },
             { EventTypeDTOConstants.ReplyReservation, StorageEventType.ReplyReservation },
             { EventTypeDTOConstants.ReplyReservationsCleared, StorageEventType.ReplyReservationsEmptied },
-            //kokous jatkuu?
-            //attendees?
+            { EventTypeDTOConstants.MeetingContinues, StorageEventType.MeetingContinues }
         };
 
         public StorageEventType MapToMeetingEventType(string? meetingEventType)

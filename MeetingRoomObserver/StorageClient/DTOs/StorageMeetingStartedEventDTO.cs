@@ -4,7 +4,7 @@
     {
         public StorageMeetingStartedEventDTO()
         {
-            EventType = StorageClient.StorageEventType.MeetingStarted;
+            EventType = StorageEventType.MeetingStarted;
         }
 
         public string MeetingTitleFI { get; set; }

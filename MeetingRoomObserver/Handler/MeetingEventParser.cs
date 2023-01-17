@@ -35,7 +35,7 @@ namespace MeetingRoomObserver.Handler
             { EventTypeDTOConstants.Propositions, (dynamic o) => o.ToObject<PropositionsRoomEventDTO>() },
             { EventTypeDTOConstants.Pause, (dynamic o) => o.ToObject<PauseRoomEventDTO>() },
             { EventTypeDTOConstants.PauseInfo, (dynamic o) => o.ToObject<PauseInfoRoomEventDTO>() },
-
+            { EventTypeDTOConstants.MeetingContinues, (dynamic o) => o.ToObject<MeetingContinuesRoomEventDTO>() },
         };
 
         public MeetingEventList ParseJsonMessage(string jsonMessage)

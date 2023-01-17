@@ -3,6 +3,7 @@ using MeetingRoomObserver.Handler.DTOs;
 using MeetingRoomObserver.Models;
 using MeetingRoomObserver.StorageClient;
 using MeetingRoomObserver.StorageClient.DTOs;
+using Newtonsoft.Json;
 
 namespace MeetingRoomObserver.Mapper
 {
@@ -61,8 +62,9 @@ namespace MeetingRoomObserver.Mapper
             storageEvents.AddRange(MapInputToOutputDTO<StoragePropositionsEventDTO, PropositionsRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageReplyReservationEventDTO, ReplyReservationRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageReplyReservationsEmptiedEventDTO, ReplyReservationsClearedRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageMeetingContinuesEventDTO, MeetingContinuesRoomEventDTO>(mapper, meetingEventList.Events));
 
-            if (meetingEventList.AttendeesListRoom != null)
+            if (meetingEventList.AttendeesListRoom.Seats.Length > 0)
             {
                 storageEvents.Add(MapAttendees(mapper, meetingEventList.AttendeesListRoom));
             }
@@ -108,7 +110,7 @@ namespace MeetingRoomObserver.Mapper
 
                 AddStorageReplyReservationEventMappers(cfg, state, meetingId);
             });
-         //   config.AssertConfigurationIsValid();
+            config.AssertConfigurationIsValid();
 
             return config.CreateMapper();
         }
@@ -141,6 +143,12 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber));
 
             mapperConfiguration.CreateMap<MeetingEndsRoomEventDTO, StorageMeetingEndedEventDTO>()
+                .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
+                .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
+                .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
+                .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber));
+
+            mapperConfiguration.CreateMap<MeetingContinuesRoomEventDTO, StorageMeetingContinuesEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
@@ -203,6 +211,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber))
+                .ForMember(dest => dest.EventType, opt => opt.Ignore())
                 .ForMember(dest => dest.Timestamp, opt => opt.MapFrom(_ => DateTime.MinValue));
 
             mapperConfiguration.CreateMap<SeatRoomDTO, StorageMeetingSeatDTO>()
