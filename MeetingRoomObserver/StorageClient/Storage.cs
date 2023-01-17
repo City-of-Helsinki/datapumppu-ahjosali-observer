@@ -9,16 +9,30 @@ namespace MeetingRoomObserver.StorageClient
 
     public class Storage : IStorage
     {
-        private readonly IStorageKafkaClient _busClient;
+        private readonly IConfiguration _configuration;
 
-        public Storage(IStorageKafkaClient busClient)
+        private readonly IStorageServiceBusClient _busClient;
+
+        private readonly IStorageKafkaClient _kafkaClient;
+
+        public Storage(
+            IConfiguration configuration,
+            IStorageServiceBusClient busClient,
+            IStorageKafkaClient kafkaClient)
         {
+            _configuration = configuration;
             _busClient = busClient;
+            _kafkaClient = kafkaClient;
         }
 
         public Task Add(StorageEventDTO storageEventDTO)
         {
-            return _busClient.SendEvent(storageEventDTO);
+            if (!string.IsNullOrEmpty(_configuration["SB_CONNECTION_STRING"]))
+            {
+                return _busClient.SendEvent(storageEventDTO);
+            }
+
+            return _kafkaClient.SendEvent(storageEventDTO);
         }
     }
 }
