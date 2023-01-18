@@ -32,8 +32,8 @@ namespace MeetingRoomObserverUnitTests.Handler
 
             Assert.Equal(85, votingEvent.Votes!.Length);
             Assert.Equal("JAA", votingEvent.Votes[0].VoteType);
-            Assert.Equal("Finne-Elonen Laura /SFP", votingEvent.Votes[0].NameFI);
-            Assert.Equal("Finne-Elonen Laura /SFP", votingEvent.Votes[0].NameSV);
+            Assert.Equal("Finne-Elonen Laura /SFP", votingEvent.Votes[0].PersonFI);
+            Assert.Equal("Finne-Elonen Laura /SFP", votingEvent.Votes[0].PersonSV);
         }
 
 
