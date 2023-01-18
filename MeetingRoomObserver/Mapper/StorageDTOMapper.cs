@@ -199,7 +199,7 @@ namespace MeetingRoomObserver.Mapper
                 
 
             mapperConfiguration.CreateMap<VoteRoomDTO, StorageVoteDTO>()
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)))
                 .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => _voteTypeMapper.MapToVoteType(src.VoteType)));
@@ -218,7 +218,7 @@ namespace MeetingRoomObserver.Mapper
 
             mapperConfiguration.CreateMap<SeatRoomDTO, StorageMeetingSeatDTO>()
                 .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat))
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
         }
@@ -264,7 +264,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber));
 
             mapperConfiguration.CreateMap<SpeechRoomDTO, StorageSpeakingTurnDTO>()
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.SpeechType, opt => opt.MapFrom(src => _speechTypeMapper.MapToSpeechType(src.SpeechType)))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
@@ -274,7 +274,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber))
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)))
                 .ForMember(dest => dest.SpeechType, opt => opt.MapFrom(src => _speechTypeMapper.MapToSpeechType(src.SpeechType)))
@@ -292,7 +292,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber))
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)))
                 .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat));
@@ -311,7 +311,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber))
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)))
                 .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat));
@@ -321,7 +321,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber))
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)))
                 .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat));
@@ -358,7 +358,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)))
                 .ForMember(dest => dest.DurationSeconds, opt => opt.MapFrom(src => src.SpeechTime))
@@ -380,7 +380,7 @@ namespace MeetingRoomObserver.Mapper
             mapperConfiguration.CreateMap<PropositionRoomDTO, StoragePropositionDTO>()
                 .ForMember(dest => dest.TextFI, opt => opt.MapFrom(src => src.TextFI))
                 .ForMember(dest => dest.TextSV, opt => opt.MapFrom(src => src.TextSV))
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.PropositionType))
@@ -395,7 +395,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber))
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0]))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
 
