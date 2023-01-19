@@ -1,6 +1,8 @@
 using MeetingRoomObserver.Handler;
 using MeetingRoomObserver.Mapper;
 using MeetingRoomObserver.StorageClient;
+using MeetingRoomObserver.Events;
+using MeetingRoomObserver.Events.Providers;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("MeetingRoomObserverUnitTests")]
@@ -51,6 +53,9 @@ namespace MeetingRoomObserver
 
         private static void AddDependencyInjections(IServiceCollection servicess)
         {
+            servicess.AddSingleton<IKafkaClientFactory, KafkaClientFactory>();
+            servicess.AddHostedService<AhjoSaliEventObserver>();
+
             servicess.AddTransient<IMeetingEventParser, MeetingEventParser>();
             servicess.AddTransient<IMeetingMessageHandler, MeetingMessageHandler>();
 
