@@ -19,7 +19,7 @@ namespace MeetingRoomObserver.StorageClient
         {
             _configuration = configuration;
             _hostEnvironment = hostEnvironment;
-            _logger = logger; 
+            _logger = logger;
         }
 
         public Task SendEvent(StorageEventDTO storageEventDTO)
@@ -42,18 +42,18 @@ namespace MeetingRoomObserver.StorageClient
                     BootstrapServers = _configuration["KAFKA_BOOTSTRAP_SERVER"],
                 };
             }
-            else
+
+            var cert = parseCert(_configuration["SSL_CERT_PEM"]);
+
+            return new ProducerConfig
             {
-                return new ProducerConfig
-                {
-                    BootstrapServers = _configuration["KAFKA_BOOTSTRAP_SERVER"],
-                    SaslMechanism = SaslMechanism.ScramSha512,
-                    SecurityProtocol = SecurityProtocol.SaslSsl,
-                    SaslUsername = _configuration["KAFKA_USER_USERNAME"],
-                    SaslPassword = _configuration["KAFKA_USER_PASSWORD"],
-                    SslCertificatePem = _configuration["SSL_CERT_PEM"]
-                };
-            }
+                BootstrapServers = _configuration["KAFKA_BOOTSTRAP_SERVER"],
+                SaslMechanism = SaslMechanism.ScramSha512,
+                SecurityProtocol = SecurityProtocol.SaslSsl,
+                SaslUsername = _configuration["KAFKA_USER_USERNAME"],
+                SaslPassword = _configuration["KAFKA_USER_PASSWORD"],
+                SslCertificatePem = cert,
+            };
         }
 
         private IProducer<Null, string> CreateKafkaProducer()
@@ -61,6 +61,16 @@ namespace MeetingRoomObserver.StorageClient
             var config = CreateKafkaConfiguration();
 
             return new ProducerBuilder<Null, string>(config).Build();
+        }
+
+        private string parseCert(string cert)
+        {
+            cert = cert.Replace("\"", "");
+
+            var certBegin = "-----BEGIN CERTIFICATE-----\n";
+            var certEnd = "\n-----END CERTIFICATE-----";
+
+            return certBegin + cert + certEnd;
         }
 
     }
