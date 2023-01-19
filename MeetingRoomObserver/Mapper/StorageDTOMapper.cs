@@ -45,23 +45,23 @@ namespace MeetingRoomObserver.Mapper
             storageEvents.AddRange(MapInputToOutputDTO<StorageMeetingEndedEventDTO, MeetingEndsRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageVotingStartedEventDTO, VotingStartsRoomEventDTO > (mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageVotingEndedEventDTO, VotingEndsRoomEventDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<StorageSpeakingTurnsEventDTO, SpeechListRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageStatementsEventDTO, SpeechListRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageCaseEventDTO, CaseRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageRollCallStartedEventDTO, RollCallStartsRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageRollCallEndedEventDTO, RollCallEndsRoomEventDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<StorageSpeakingTurnReservationEventDTO, FloorReservationRoomEventDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<StorageSpeakingTurnReservationsEmptiedEventDTO, FloorReservationsClearedRoomEventDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<StorageSpeakingTurnStartedEventDTO, SpeechStartsRoomEventDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<StorageSpeakingTurnEndedEventDTO, SpeechEndsRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageStatementReservationEventDTO, FloorReservationRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageStatementReservationsClearedEventDTO, FloorReservationsClearedRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageStatementStartedEventDTO, SpeechStartsRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageStatementEndedEventDTO, SpeechEndsRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StoragePersonArrivedEventDTO, PersonArrivedRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StoragePersonLeftEventDTO, PersonLeftRoomEventDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<StorageBreakEventDTO, PauseRoomEventDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<StorageBreakNoticeEventDTO, PauseInfoRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StoragePauseEventDTO, PauseRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StoragePauseInfoEventDTO, PauseInfoRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageDiscussionStartsEventDTO, DiscussionStartsRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageSpeechTimerEventDTO, SpeechTimerRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StoragePropositionsEventDTO, PropositionsRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageReplyReservationEventDTO, ReplyReservationRoomEventDTO>(mapper, meetingEventList.Events));
-            storageEvents.AddRange(MapInputToOutputDTO<StorageReplyReservationsEmptiedEventDTO, ReplyReservationsClearedRoomEventDTO>(mapper, meetingEventList.Events));
+            storageEvents.AddRange(MapInputToOutputDTO<StorageReplyReservationsClearedEventDTO, ReplyReservationsClearedRoomEventDTO>(mapper, meetingEventList.Events));
             storageEvents.AddRange(MapInputToOutputDTO<StorageMeetingContinuesEventDTO, MeetingContinuesRoomEventDTO>(mapper, meetingEventList.Events));
 
             if (meetingEventList.AttendeesListRoom.Seats.Length > 0)
@@ -256,20 +256,20 @@ namespace MeetingRoomObserver.Mapper
 
         private void AddStorageSpeakingTurnEventMappers(IMapperConfigurationExpression mapperConfiguration, StateQueryDTO state, string meetingId)
         {
-            mapperConfiguration.CreateMap<SpeechListRoomEventDTO, StorageSpeakingTurnsEventDTO>()
+            mapperConfiguration.CreateMap<SpeechListRoomEventDTO, StorageStatementsEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
-                .ForMember(dest => dest.SpeakingTurns, opt => opt.MapFrom(src => src.Speeches))
+                .ForMember(dest => dest.Statements, opt => opt.MapFrom(src => src.Speeches))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber));
 
-            mapperConfiguration.CreateMap<SpeechRoomDTO, StorageSpeakingTurnDTO>()
+            mapperConfiguration.CreateMap<SpeechRoomDTO, StorageStatementDTO>()
                 .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.SpeechType, opt => opt.MapFrom(src => _speechTypeMapper.MapToSpeechType(src.SpeechType)))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
 
-            mapperConfiguration.CreateMap<SpeechStartsRoomEventDTO, StorageSpeakingTurnStartedEventDTO>()
+            mapperConfiguration.CreateMap<SpeechStartsRoomEventDTO, StorageStatementStartedEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
@@ -281,13 +281,13 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.SpeakingTime, opt => opt.MapFrom(src => src.SpeechTime))
                 .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat));
 
-            mapperConfiguration.CreateMap<SpeechEndsRoomEventDTO, StorageSpeakingTurnEndedEventDTO>()
+            mapperConfiguration.CreateMap<SpeechEndsRoomEventDTO, StorageStatementEndedEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber));
 
-            mapperConfiguration.CreateMap<FloorReservationRoomEventDTO, StorageSpeakingTurnReservationEventDTO>()
+            mapperConfiguration.CreateMap<FloorReservationRoomEventDTO, StorageStatementReservationEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
@@ -297,7 +297,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)))
                 .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat));
 
-            mapperConfiguration.CreateMap<FloorReservationsClearedRoomEventDTO, StorageSpeakingTurnReservationsEmptiedEventDTO>()
+            mapperConfiguration.CreateMap<FloorReservationsClearedRoomEventDTO, StorageStatementReservationsClearedEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
@@ -329,18 +329,17 @@ namespace MeetingRoomObserver.Mapper
 
         private void AddStorageBreakEventMappers(IMapperConfigurationExpression mapperConfiguration, StateQueryDTO state, string meetingId)
         {
-            mapperConfiguration.CreateMap<PauseRoomEventDTO, StorageBreakEventDTO>()
+            mapperConfiguration.CreateMap<PauseRoomEventDTO, StoragePauseEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber));
 
-            mapperConfiguration.CreateMap<PauseInfoRoomEventDTO, StorageBreakNoticeEventDTO>()
+            mapperConfiguration.CreateMap<PauseInfoRoomEventDTO, StoragePauseInfoEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
-                .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber))
-                .ForMember(dest => dest.Notice, opt => opt.MapFrom(src => src.Info));
+                .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber));
         }
 
         private void AddStorageDiscussionStartsEventMapper(IMapperConfigurationExpression mapperConfiguration, StateQueryDTO state, string meetingId)
@@ -399,7 +398,7 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
 
-            mapperConfiguration.CreateMap<ReplyReservationsClearedRoomEventDTO, StorageReplyReservationsEmptiedEventDTO>()
+            mapperConfiguration.CreateMap<ReplyReservationsClearedRoomEventDTO, StorageReplyReservationsClearedEventDTO>()
                 .ForMember(dest => dest.MeetingID, opt => opt.MapFrom(_ => meetingId))
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
