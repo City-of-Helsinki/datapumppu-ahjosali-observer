@@ -85,6 +85,7 @@ namespace MeetingRoomObserver.Events.Providers
 
         private string ParseCert(string cert)
         {
+            // To prevent pipeline errors the keyvault ca.crt is in quotes and without the begin/end tags. 
             cert = cert.Replace("\"", "");
 
             var certBegin = "-----BEGIN CERTIFICATE-----\n";
