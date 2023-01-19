@@ -45,7 +45,7 @@ namespace MeetingRoomObserver.Events.Providers
                 };
             }
 
-            var cert = parseCert(_configuration["SSL_CERT_PEM"]);
+            var cert = ParseCert(_configuration["SSL_CERT_PEM"]);
 
             return new ConsumerConfig
             {
@@ -70,7 +70,7 @@ namespace MeetingRoomObserver.Events.Providers
                 };
             }
 
-            var cert = parseCert(_configuration["SSL_CERT_PEM"]);
+            var cert = ParseCert(_configuration["SSL_CERT_PEM"]);
 
             return new ProducerConfig
             {
@@ -83,7 +83,7 @@ namespace MeetingRoomObserver.Events.Providers
             };
         }
 
-        private string parseCert(string cert)
+        private string ParseCert(string cert)
         {
             cert = cert.Replace("\"", "");
 
