@@ -1,6 +1,6 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
-    public class StorageSpeakingTurnDTO
+    public class StorageStatementDTO
     {
         public string? Person { get; set; }
 

@@ -138,7 +138,7 @@ namespace UnitTests.Mapper
 
             var result = storageMapper.MapToStorageDTOs(meetingEventList);
 
-            var resultEvent = result[0] as StorageSpeakingTurnReservationEventDTO;
+            var resultEvent = result[0] as StorageStatementReservationEventDTO;
             Assert.NotNull(resultEvent);
             Assert.Equal("02900201521", resultEvent.MeetingID);
             Assert.Equal("Kalle", resultEvent.Person);
@@ -203,17 +203,17 @@ namespace UnitTests.Mapper
 
             var result = storageMapper.MapToStorageDTOs(meetingEventList);
 
-            var resultEvent = result[0] as StorageSpeakingTurnsEventDTO;
+            var resultEvent = result[0] as StorageStatementsEventDTO;
             Assert.NotNull(resultEvent);
 
-            var s1 = resultEvent.SpeakingTurns[0];
+            var s1 = resultEvent.Statements[0];
             Assert.Equal("02900201521", resultEvent.MeetingID);
             Assert.Equal("Kalle", s1.Person);
             Assert.Equal("pormestari", s1.AdditionalInfoFI);
             Assert.Equal("RKP", s1.AdditionalInfoSV);
             Assert.Equal(64, s1.Duration);
 
-            var s2 = resultEvent.SpeakingTurns[1];
+            var s2 = resultEvent.Statements[1];
             Assert.Equal("Kalle", s2.Person);
             Assert.Equal("pormestari", s2.AdditionalInfoFI);
             Assert.Equal("RKP", s2.AdditionalInfoSV);
