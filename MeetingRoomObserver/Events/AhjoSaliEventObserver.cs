@@ -48,6 +48,7 @@ namespace MeetingRoomObserver.Events
                     var cr = consumer.Consume(stoppingToken);
 
                     _logger.LogInformation("AhjoSali event received");
+                    _logger.LogInformation(cr.Message.Value);
 
                     await _eventHandler.HandleMessage(cr.Message.Value);
 
