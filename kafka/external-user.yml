@@ -1,0 +1,29 @@
+kind: KafkaUser
+apiVersion: kafka.strimzi.io/v1beta2
+metadata:
+  name: external-user
+  labels:
+    strimzi.io/cluster: kafka
+  namespace: hki-kanslia-datapumppu-dev
+spec:
+  authentication:
+    type: scram-sha-512
+  authorization:
+    type: simple
+    acls:
+      - host: '*'
+        operations:
+          - Describe
+          - Write
+        resource:
+          name: ahjosali-topic
+          patternType: literal
+          type: topic
+      - host: '*'
+        operations:
+          - Read
+        resource:
+          name: ahjosali-consumer
+          patternType: literal
+          type: group
+        type: allow
