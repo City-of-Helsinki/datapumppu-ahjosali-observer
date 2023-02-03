@@ -52,7 +52,7 @@ namespace MeetingRoomObserver.Events
 
                     await _eventHandler.HandleMessage(cr.Message.Value);
 
-                    consumer.Commit();
+                    consumer.Commit(cr);
 
                 }
                 catch (OperationCanceledException)
