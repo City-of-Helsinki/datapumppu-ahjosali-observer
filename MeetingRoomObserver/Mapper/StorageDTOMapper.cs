@@ -76,6 +76,11 @@ namespace MeetingRoomObserver.Mapper
         {
             const string DecisionMaker = "02900";
             var idData = id.Split('/', ' ');
+            if (idData.Length == 1)
+            {
+                return $"{DecisionMaker}{idData[0]}";
+            }
+
             return $"{DecisionMaker}{idData[0]}{idData[1]}";
         }
 
