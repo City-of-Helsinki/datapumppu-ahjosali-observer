@@ -24,6 +24,16 @@ namespace MeetingRoomObserver
 
             AddDependencyInjections(builder.Services);
 
+            builder.Services.AddLogging(options =>
+            {
+                options.AddSimpleConsole(c =>
+                {
+                    c.IncludeScopes = true;
+                    c.SingleLine = true;
+                    c.TimestampFormat = "dd.MM.yyyy HH:mm:ss ";
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
