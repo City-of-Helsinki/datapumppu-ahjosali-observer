@@ -15,6 +15,7 @@ namespace MeetingRoomObserver.Mapper
         private readonly Dictionary<string, int> _map = new Dictionary<string, int>()
         {
             { "NORMAL", 0 },
+            { "NORMAALI", 0 },
             { "PON", 1 },
             { "PAL", 2 },
             { "HUL", 3 },
@@ -24,12 +25,12 @@ namespace MeetingRoomObserver.Mapper
 
         public int MapToVotingType(string? voteType)
         {
-            if (voteType == null || !_map.ContainsKey(voteType))
+            if (voteType == null || !_map.ContainsKey(voteType.ToUpper()))
             {
                 throw new NotSupportedException("Unknown voting type: " + voteType);
             }
 
-            return _map[voteType];
+            return _map[voteType.ToUpper()];
         }
     }
 }
