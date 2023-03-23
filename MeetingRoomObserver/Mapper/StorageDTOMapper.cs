@@ -399,6 +399,9 @@ namespace MeetingRoomObserver.Mapper
                 .ForMember(dest => dest.SequenceNumber, opt => opt.MapFrom(_ => state.SequenceNumber))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(_ => state.CaseNumber))
                 .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber))
+                .ForMember(dest => dest.Ordinal, opt => opt.MapFrom(src => src.Ordinal))
+                .ForMember(dest => dest.SeatID, opt => opt.MapFrom(src => src.Seat))
+                .ForMember(dest => dest.ItemNumber, opt => opt.MapFrom(_ => state.ItemNumber))
                 .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.PersonFI.Split('/', '(')[0].Trim()))
                 .ForMember(dest => dest.AdditionalInfoFI, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonFI)))
                 .ForMember(dest => dest.AdditionalInfoSV, opt => opt.MapFrom(src => ParseAdditionalInfo(src.PersonSV)));
