@@ -38,37 +38,46 @@ namespace MeetingRoomObserver.Events
         {
             var topic = _configuration["KAFKA_CONSUMER_TOPIC"];
             var consumer = _clientFactory.CreateConsumer();
-
             consumer.Subscribe(topic);
+            bool recreateConstumer = false;
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    var cr = consumer.Consume(stoppingToken);
+                    if (recreateConstumer)
+                    {
+                        consumer = _clientFactory.CreateConsumer();
+                        consumer.Subscribe(topic);
+                        recreateConstumer = false;
+                    }
 
-                    _logger.LogInformation("AhjoSali event received");
-                    _logger.LogInformation(cr.Message.Value);
+                    var cr = consumer.Consume(5000);
+                    if (cr != null && !string.IsNullOrEmpty(cr.Message.Value))
+                    {
+                        _logger.LogInformation("AhjoSali event received");
+                        _logger.LogInformation(cr.Message.Value);
 
-                    await _eventHandler.HandleMessage(cr.Message.Value);
+                        await _eventHandler.HandleMessage(cr.Message.Value);
 
-                    consumer.Commit(cr);
+                        consumer.Commit(cr);
+                    }
 
                 }
                 catch (OperationCanceledException)
                 {
+                    recreateConstumer = true;
                     _logger.LogWarning("Consumer Operation Canceled.");
                     break;
                 }
                 catch (ConsumeException e)
                 {
+                    recreateConstumer = true;
                     _logger.LogError("Consumer Error: " + e.Message);
                 }
                 catch (Exception e)
                 {
-                    consumer = _clientFactory.CreateConsumer();
-                    consumer.Subscribe(topic);
-
+                    recreateConstumer = true;
                     _logger.LogError("Consumer Unexpected Error: " + e.Message);
                 }
             }
