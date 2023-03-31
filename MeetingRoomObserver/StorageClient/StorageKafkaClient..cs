@@ -16,6 +16,7 @@ namespace MeetingRoomObserver.StorageClient
         private readonly ILogger<StorageKafkaClient> _logger;
         private IHostEnvironment _hostEnvironment;
         private IKafkaClientFactory _clientFactory;
+        private IProducer<Null, string>? _producer = null;
 
         public StorageKafkaClient(
             IConfiguration configuration,
@@ -29,15 +30,30 @@ namespace MeetingRoomObserver.StorageClient
             _clientFactory = clientFactory;
         }
 
-        public Task SendEvent(StorageEventDTO storageEventDTO)
+        public async Task SendEvent(StorageEventDTO storageEventDTO)
         {
             _logger.LogInformation("Sending event to Storage");
             var topic = _configuration["KAFKA_PRODUCER_TOPIC"];
 
-            var producer = _clientFactory.CreateProducer();
+            if (_producer == null)
+            {
+                var producer = _clientFactory.CreateProducer();
+            }
+
             var jsonBody = JsonConvert.SerializeObject(storageEventDTO);
 
-            return producer.ProduceAsync(topic, new Message<Null, string> { Value = jsonBody });
+            try
+            {
+                if (_producer != null)
+                {
+                    await _producer.ProduceAsync(topic, new Message<Null, string> { Value = jsonBody });
+                }                
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Producer failed");
+                _producer = null;
+            }
         }
 
     }
