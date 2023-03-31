@@ -53,7 +53,7 @@ namespace MeetingRoomObserver.Events
                         recreateConstumer = false;
                     }
 
-                    var cr = consumer.Consume(5000);
+                    var cr = consumer.Consume(stoppingToken);
                     if (cr != null && !string.IsNullOrEmpty(cr.Message.Value))
                     {
                         _logger.LogInformation("AhjoSali event received");
