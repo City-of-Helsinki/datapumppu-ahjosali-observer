@@ -29,9 +29,9 @@ namespace MeetingRoomObserver.Events
             _eventHandler = eventHandler;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await MessageHandler(stoppingToken);
+            return Task.Run(() => MessageHandler(stoppingToken));
         }
 
         private async Task MessageHandler(CancellationToken stoppingToken)
@@ -47,6 +47,7 @@ namespace MeetingRoomObserver.Events
                 {
                     if (recreateConstumer)
                     {
+                        _logger.LogWarning("recreating consumer");
                         consumer = _clientFactory.CreateConsumer();
                         consumer.Subscribe(topic);
                         recreateConstumer = false;
