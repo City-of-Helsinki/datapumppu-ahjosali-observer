@@ -66,6 +66,9 @@ namespace MeetingRoomObserver.Events
                 }
                 catch (Exception e)
                 {
+                    consumer = _clientFactory.CreateConsumer();
+                    consumer.Subscribe(topic);
+
                     _logger.LogError("Consumer Unexpected Error: " + e.Message);
                 }
             }
