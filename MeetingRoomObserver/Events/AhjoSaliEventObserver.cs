@@ -29,12 +29,12 @@ namespace MeetingRoomObserver.Events
             _eventHandler = eventHandler;
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return Task.Run(() => MessageHandler(stoppingToken), stoppingToken);
+            await MessageHandler(stoppingToken);
         }
 
-        private async void MessageHandler(CancellationToken stoppingToken)
+        private async Task MessageHandler(CancellationToken stoppingToken)
         {
             var topic = _configuration["KAFKA_CONSUMER_TOPIC"];
             var consumer = _clientFactory.CreateConsumer();
