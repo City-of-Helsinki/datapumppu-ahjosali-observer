@@ -37,7 +37,7 @@ namespace MeetingRoomObserver.StorageClient
 
             if (_producer == null)
             {
-                var producer = _clientFactory.CreateProducer();
+                _producer = _clientFactory.CreateProducer();
             }
 
             var jsonBody = JsonConvert.SerializeObject(storageEventDTO);
