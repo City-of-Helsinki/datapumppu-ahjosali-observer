@@ -30,7 +30,6 @@ namespace MeetingRoomObserver
 
         public async Task HandleMessage(string jsonBody)
         {
-            _logger.LogInformation("HandleMessage: " + jsonBody);
             var meetingEvents = _meetingEventParser.ParseJsonMessage(jsonBody);
 
             var storageEventList = _storageDTOMapper.MapToStorageDTOs(meetingEvents);
