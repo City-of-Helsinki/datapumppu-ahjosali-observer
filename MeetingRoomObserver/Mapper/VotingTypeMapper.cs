@@ -18,7 +18,7 @@ namespace MeetingRoomObserver.Mapper
             { "NORMAALI", 0 },
             { "PON", 1 },
             { "PAL", 2 },
-            { "HUL", 3 },
+            { "HYL", 3 },
             { "VAS", 4 },
             { "PPA", 5 },
         };
