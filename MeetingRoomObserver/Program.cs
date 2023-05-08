@@ -76,8 +76,8 @@ namespace MeetingRoomObserver
             
             servicess.AddTransient<IStorageDTOMapper, StorageDTOMapper>();
             servicess.AddTransient<IStorage, Storage>();
+            servicess.AddTransient<IStorageApiClient, IStorageApiClient>();
 
-            servicess.AddTransient<IStorageServiceBusClient, StorageServiceBusClient>();
             servicess.AddTransient<IStorageKafkaClient, StorageKafkaClient>();
 
         }
