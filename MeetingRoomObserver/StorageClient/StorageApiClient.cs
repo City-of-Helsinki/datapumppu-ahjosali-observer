@@ -2,7 +2,7 @@
 {
     public interface IStorageApiClient
     {
-        Task<string?> GetMeetingId(string year, string sequenceNumber);
+        Task<string> GetMeetingId(string year, string sequenceNumber);
 
     }
 

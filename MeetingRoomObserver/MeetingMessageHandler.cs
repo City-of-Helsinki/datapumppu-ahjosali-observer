@@ -32,7 +32,7 @@ namespace MeetingRoomObserver
         {
             var meetingEvents = _meetingEventParser.ParseJsonMessage(jsonBody);
 
-            var storageEventList = _storageDTOMapper.MapToStorageDTOs(meetingEvents);
+            var storageEventList = await _storageDTOMapper.MapToStorageDTOs(meetingEvents);
             foreach (var storageEvent in storageEventList)
             {
                 await _storage.Add(storageEvent);

@@ -9,7 +9,7 @@ namespace MeetingRoomObserver.Mapper
 {
     public interface IStorageDTOMapper
     {
-        List<StorageEventDTO> MapToStorageDTOs(MeetingEventList? meetingEventList);
+        Task<List<StorageEventDTO>> MapToStorageDTOs(MeetingEventList? meetingEventList);
     }
 
     public class StorageDTOMapper : IStorageDTOMapper
@@ -18,26 +18,30 @@ namespace MeetingRoomObserver.Mapper
         private readonly IVotingTypeMapper _votingTypeMapper;
         private readonly IVoteTypeMapper _voteTypeMapper;
         private readonly ISpeechTypeMapper _speechTypeMapper;
+        private readonly IStorageApiClient _storageApiClient;
+        private readonly Dictionary<string, string> _meetingIdMap = new Dictionary<string, string>();
 
         public StorageDTOMapper(
             IMeetingEventTypeMapper meetingEventTypeMapper,
             IVoteTypeMapper voteTypeMapper,
             IVotingTypeMapper votingTypeMapper,
-            ISpeechTypeMapper speechTypeMapper)
+            ISpeechTypeMapper speechTypeMapper,
+            IStorageApiClient storageApiClient)
         {
             _meetingEventTypeMapper = meetingEventTypeMapper;
             _votingTypeMapper = votingTypeMapper;
             _voteTypeMapper = voteTypeMapper;
             _speechTypeMapper = speechTypeMapper;
+            _storageApiClient = storageApiClient;
         }
 
-        public List<StorageEventDTO> MapToStorageDTOs(MeetingEventList? meetingEventList)
+        public async Task<List<StorageEventDTO>> MapToStorageDTOs(MeetingEventList? meetingEventList)
         {
             if (meetingEventList == null || string.IsNullOrEmpty(meetingEventList.MeetingID) || meetingEventList.Events.Count == 0)
             {
                 return new List<StorageEventDTO>();
             }
-            var meetingId = FormatMeetingId(meetingEventList.MeetingID);
+            var meetingId = await GetMeetingId(meetingEventList.MeetingID);
             var mapper = CreateMapper(meetingEventList.State!, meetingId);
 
             var storageEvents = new List<StorageEventDTO>();
@@ -72,16 +76,17 @@ namespace MeetingRoomObserver.Mapper
             return storageEvents.ToList();
         }
 
-        private string FormatMeetingId(string id)
+        private async Task<string> GetMeetingId(string id)
         {
-            const string DecisionMaker = "02900";
-            var idData = id.Split('/', ' ');
-            if (idData.Length == 1)
+            if (!_meetingIdMap.ContainsKey(id))
             {
-                return $"{DecisionMaker}{idData[0]}";
+                var idData = id.Split('/', ' ');
+                var meetingId = await _storageApiClient.GetMeetingId(idData[0], idData[1]);
+                _meetingIdMap[id] = meetingId ?? "";
+
             }
 
-            return $"{DecisionMaker}{idData[0]}{idData[1]}";
+            return _meetingIdMap[id];
         }
 
         private IMapper CreateMapper(StateQueryDTO state, string meetingId)
