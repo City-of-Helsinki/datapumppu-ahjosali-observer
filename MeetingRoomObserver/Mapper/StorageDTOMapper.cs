@@ -83,12 +83,16 @@ namespace MeetingRoomObserver.Mapper
 
         private async Task<string> GetMeetingId(string id)
         {
+            if (_meetingIdMap.Count > 10)
+            {
+                _meetingIdMap.Clear();
+            }
+
             if (!_meetingIdMap.ContainsKey(id))
             {
                 var idData = id.Split('/', ' ');
                 var meetingId = await _storageApiClient.GetMeetingId(idData[0], idData[1]);
                 _meetingIdMap[id] = meetingId ?? "";
-
             }
 
             return _meetingIdMap[id];
