@@ -1,4 +1,5 @@
-﻿using MeetingRoomObserver.Handler.DTOs;
+﻿using Castle.Core.Logging;
+using MeetingRoomObserver.Handler.DTOs;
 using MeetingRoomObserver.Mapper;
 using MeetingRoomObserver.Models;
 using MeetingRoomObserver.StorageClient;
@@ -21,7 +22,7 @@ namespace UnitTests.Mapper
             var storageApiClient = new Mock<IStorageApiClient>();
             storageApiClient.Setup(m => m.GetMeetingId(It.IsAny<string>(), It.IsAny<string>())).Returns(() => Task.FromResult("02900201521"));
 
-            var storageMapper = new StorageDTOMapper(
+            var storageMapper = new StorageDTOMapper(null,
                 eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object, speechTypeMapper.Object, storageApiClient.Object);
 
             var meetingEventList = new MeetingEventList
@@ -73,7 +74,7 @@ namespace UnitTests.Mapper
             var storageApiClient = new Mock<IStorageApiClient>();
             storageApiClient.Setup(m => m.GetMeetingId(It.IsAny<string>(), It.IsAny<string>())).Returns(() => Task.FromResult("02900201521"));
 
-            var storageMapper = new StorageDTOMapper(
+            var storageMapper = new StorageDTOMapper(null,
                 eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object, speechTypeMapper.Object, storageApiClient.Object);
 
             var meetingEventList = new MeetingEventList
@@ -120,7 +121,7 @@ namespace UnitTests.Mapper
             var storageApiClient = new Mock<IStorageApiClient>();
             storageApiClient.Setup(m => m.GetMeetingId(It.IsAny<string>(), It.IsAny<string>())).Returns(() => Task.FromResult("02900201521"));
 
-            var storageMapper = new StorageDTOMapper(
+            var storageMapper = new StorageDTOMapper(null,
                 eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object, speechTypeMapper.Object, storageApiClient.Object);
 
             var meetingEventList = new MeetingEventList
@@ -166,7 +167,7 @@ namespace UnitTests.Mapper
             var storageApiClient = new Mock<IStorageApiClient>();
             storageApiClient.Setup(m => m.GetMeetingId(It.IsAny<string>(), It.IsAny<string>())).Returns(() => Task.FromResult("02900201521"));
 
-            var storageMapper = new StorageDTOMapper(
+            var storageMapper = new StorageDTOMapper(null,
                 eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object, speechTypeMapper.Object, storageApiClient.Object);
 
             var startTime = DateTime.Now;
@@ -244,7 +245,7 @@ namespace UnitTests.Mapper
             var storageApiClient = new Mock<IStorageApiClient>();
             storageApiClient.Setup(m => m.GetMeetingId(It.IsAny<string>(), It.IsAny<string>())).Returns(() => Task.FromResult("02900201521"));
 
-            var storageMapper = new StorageDTOMapper(
+            var storageMapper = new StorageDTOMapper(null,
                 eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object, speechTypeMapper.Object, storageApiClient.Object);
 
             var startTime = DateTime.Now;
@@ -300,7 +301,7 @@ namespace UnitTests.Mapper
             var storageApiClient = new Mock<IStorageApiClient>();
             storageApiClient.Setup(m => m.GetMeetingId(It.IsAny<string>(), It.IsAny<string>())).Returns(() => Task.FromResult("02900201521"));
 
-            var storageMapper = new StorageDTOMapper(
+            var storageMapper = new StorageDTOMapper(null,
                 eventTypeMapper.Object, voteTypeMapper.Object, votingTypeMapper.Object, speechTypeMapper.Object, storageApiClient.Object);
 
 

@@ -14,6 +14,7 @@ namespace MeetingRoomObserver.Mapper
 
     public class StorageDTOMapper : IStorageDTOMapper
     {
+        private readonly ILogger<StorageDTOMapper>? _logger;
         private readonly IMeetingEventTypeMapper _meetingEventTypeMapper;
         private readonly IVotingTypeMapper _votingTypeMapper;
         private readonly IVoteTypeMapper _voteTypeMapper;
@@ -22,12 +23,14 @@ namespace MeetingRoomObserver.Mapper
         private readonly Dictionary<string, string> _meetingIdMap = new Dictionary<string, string>();
 
         public StorageDTOMapper(
+            ILogger<StorageDTOMapper>? logger,
             IMeetingEventTypeMapper meetingEventTypeMapper,
             IVoteTypeMapper voteTypeMapper,
             IVotingTypeMapper votingTypeMapper,
             ISpeechTypeMapper speechTypeMapper,
             IStorageApiClient storageApiClient)
         {
+            _logger = logger;
             _meetingEventTypeMapper = meetingEventTypeMapper;
             _votingTypeMapper = votingTypeMapper;
             _voteTypeMapper = voteTypeMapper;
@@ -42,6 +45,8 @@ namespace MeetingRoomObserver.Mapper
                 return new List<StorageEventDTO>();
             }
             var meetingId = await GetMeetingId(meetingEventList.MeetingID);
+            _logger?.LogInformation("meetind id {0}", meetingId);
+
             var mapper = CreateMapper(meetingEventList.State!, meetingId);
 
             var storageEvents = new List<StorageEventDTO>();
