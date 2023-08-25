@@ -67,17 +67,20 @@ namespace MeetingRoomObserver.Events
                 }
                 catch (OperationCanceledException)
                 {
+                    consumer.Close();
                     recreateConstumer = true;
                     _logger.LogWarning("Consumer Operation Canceled.");
                     break;
                 }
                 catch (ConsumeException e)
                 {
+                    consumer.Close();
                     recreateConstumer = true;
                     _logger.LogError("Consumer Error: " + e.Message);
                 }
                 catch (Exception e)
                 {
+                    consumer.Close();
                     recreateConstumer = true;
                     _logger.LogError("Consumer Unexpected Error: " + e.Message);
                 }
