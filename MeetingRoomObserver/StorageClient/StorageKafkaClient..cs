@@ -14,18 +14,15 @@ namespace MeetingRoomObserver.StorageClient
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<StorageKafkaClient> _logger;
-        private IHostEnvironment _hostEnvironment;
         private IKafkaClientFactory _clientFactory;
         private IProducer<Null, string>? _producer = null;
 
         public StorageKafkaClient(
             IConfiguration configuration,
-            IHostEnvironment hostEnvironment,
             ILogger<StorageKafkaClient> logger,
             IKafkaClientFactory clientFactory)
         {
             _configuration = configuration;
-            _hostEnvironment = hostEnvironment;
             _logger = logger;
             _clientFactory = clientFactory;
         }
