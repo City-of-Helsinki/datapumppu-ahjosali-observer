@@ -1,5 +1,4 @@
-﻿using Castle.Core.Logging;
-using MeetingRoomObserver.Handler.DTOs;
+﻿using MeetingRoomObserver.Handler.DTOs;
 using MeetingRoomObserver.Mapper;
 using MeetingRoomObserver.Models;
 using MeetingRoomObserver.StorageClient;

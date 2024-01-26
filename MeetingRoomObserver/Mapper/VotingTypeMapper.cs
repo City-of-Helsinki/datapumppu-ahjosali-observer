@@ -1,9 +1,4 @@
-﻿using AutoMapper;
-using MeetingRoomObserver.Handler.DTOs;
-using MeetingRoomObserver.Models;
-using MeetingRoomObserver.StorageClient;
-
-namespace MeetingRoomObserver.Mapper
+﻿namespace MeetingRoomObserver.Mapper
 {
     public interface IVotingTypeMapper
     {
