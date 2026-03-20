@@ -5,11 +5,24 @@ using System.Text.Json.Nodes;
 
 namespace MeetingRoomObserver.Handler
 {
+    /// <summary>
+    /// Parses raw JSON messages from the Ahjo system into structured meeting event lists.
+    /// </summary>
     public interface IMeetingEventParser
     {
+        /// <summary>
+        /// Parses a raw JSON message from the Ahjo system into a structured event list.
+        /// </summary>
+        /// <param name="jsonMessage">The raw JSON string, optionally prefixed with "data=".</param>
+        /// <returns>A <see cref="MeetingEventList"/> containing the parsed events, attendees, and meeting state.</returns>
         MeetingEventList ParseJsonMessage(string jsonMessage);
     }
 
+    /// <summary>
+    /// Deserializes Ahjo meeting room JSON messages into <see cref="MeetingEventList"/> objects.
+    /// Uses a factory dictionary to dispatch each event type string to its corresponding DTO type.
+    /// Supports all 22 recognized Ahjo event types.
+    /// </summary>
     public class MeetingEventParser : IMeetingEventParser
     {
         private Dictionary<string, Func<dynamic, EventDTO>> _eventFactory = new Dictionary<string, Func<dynamic, EventDTO>>

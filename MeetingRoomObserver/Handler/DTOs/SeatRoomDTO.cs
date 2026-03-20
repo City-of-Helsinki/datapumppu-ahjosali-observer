@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents a seat assignment in the meeting room, mapping a person (in Finnish and Swedish) to their seat number.
+    /// </summary>
     public class SeatRoomDTO
     {
         [JsonProperty("henkilo")]

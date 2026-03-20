@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents an individual proposition (ehdotus) in a meeting, with person, type, and text in Finnish and Swedish.
+    /// </summary>
     public class PropositionRoomDTO
     {
         [JsonProperty("hlo")]

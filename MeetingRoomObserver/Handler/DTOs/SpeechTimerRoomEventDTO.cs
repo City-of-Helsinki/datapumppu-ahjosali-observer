@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents a speech timer update event from the Ahjo system, containing the speaker, seat, remaining time, and countdown direction.
+    /// </summary>
     public class SpeechTimerRoomEventDTO : EventDTO
     {
         [JsonProperty("henkilo")]

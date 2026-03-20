@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents a "person arrived" event from the Ahjo system, containing the person name in Finnish and Swedish and their seat number.
+    /// </summary>
     public class PersonArrivedRoomEventDTO : EventDTO
     {
         [JsonProperty("henkilo")]

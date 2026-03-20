@@ -1,5 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
+    /// <summary>
+    /// Storage event DTO for a case/agenda item, containing proposition, case text, item text, and identifier in Finnish and Swedish.
+    /// </summary>
     public class StorageCaseEventDTO : StorageEventDTO
     {
         public StorageCaseEventDTO()

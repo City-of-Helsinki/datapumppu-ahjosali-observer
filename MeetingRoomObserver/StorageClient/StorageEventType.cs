@@ -1,5 +1,9 @@
 ﻿namespace MeetingRoomObserver.StorageClient
 {
+    /// <summary>
+    /// Defines the normalized event types used in the storage layer.
+    /// Integer values are persisted externally and must not be changed.
+    /// </summary>
     public enum StorageEventType
     {
         MeetingStarted = 0, //do not change int values!
