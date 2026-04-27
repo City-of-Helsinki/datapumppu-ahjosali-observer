@@ -29,6 +29,8 @@ An ASP.NET Core 6 microservice that consumes meeting room events from the Ahjo m
     - [Key Endpoints](#key-endpoints)
     - [Event Types](#event-types)
   - [Deployment](#deployment)
+    - [Dev/test environment](#devtest-environment)
+    - [Staging/Production environment](#stagingproduction-environment)
     - [CI/CD Pipeline](#cicd-pipeline)
     - [Health Monitoring](#health-monitoring)
   - [Development](#development)
@@ -325,20 +327,20 @@ See [StorageEventType.cs](MeetingRoomObserver/StorageClient/StorageEventType.cs)
 
 ## Deployment
 
+### Dev/test environment
+
+Open a PR and target the **develop** branch. Once the branch gets merged, Azure pipelines will take care of deployment.
+
+### Staging/Production environment
+
+Open a PR from **develop** and target the **master** branch. Once the branch gets merged, Azure pipelines will take care of deployment.
+
 ### CI/CD Pipeline
 
 The project uses **Azure Pipelines** for continuous integration and deployment:
 
 - **Development Branch:** [azure-pipelines-build-develop.yml](azure-pipelines-build-develop.yml) -- Triggers on pushes to `develop`, runs on the `Default` agent pool
 - **Production Branch:** [azure-pipelines-build-master.yml](azure-pipelines-build-master.yml) -- Triggers on pushes to `master`, runs on the `Production` agent pool
-
-Both pipelines extend templates from the `datapumppu-pipelines` repository.
-
-**Kafka Resources:**
-```bash
-kubectl apply -f kafka/ahjosali-topic.yml
-kubectl apply -f kafka/external-user.yml
-```
 
 ### Health Monitoring
 
