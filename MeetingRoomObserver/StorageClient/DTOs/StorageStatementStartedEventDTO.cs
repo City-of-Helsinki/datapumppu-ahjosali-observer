@@ -1,5 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
+    /// <summary>
+    /// Storage event DTO indicating that a statement (speech) has started, with speaker, timing, direction, seat, and speech type.
+    /// </summary>
     public class StorageStatementStartedEventDTO : StorageEventDTO
     {
         public StorageStatementStartedEventDTO()

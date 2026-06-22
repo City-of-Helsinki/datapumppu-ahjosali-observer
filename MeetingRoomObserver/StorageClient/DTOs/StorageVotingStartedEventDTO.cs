@@ -1,5 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
+    /// <summary>
+    /// Storage event DTO indicating that voting has started, containing the voting number, type, and aye/nay texts and titles in Finnish and Swedish.
+    /// </summary>
     public class StorageVotingStartedEventDTO : StorageEventDTO
     {
         public StorageVotingStartedEventDTO()

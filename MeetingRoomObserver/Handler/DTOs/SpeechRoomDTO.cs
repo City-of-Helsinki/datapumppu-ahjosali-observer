@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents an individual speech record from the Ahjo system, containing the speaker, timing, type, and duration.
+    /// </summary>
     public class SpeechRoomDTO
     {
         [JsonProperty("henkilo")]

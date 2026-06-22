@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents a "speech ends" event from the Ahjo system, containing the speaker and their seat.
+    /// </summary>
     public class SpeechEndsRoomEventDTO : EventDTO
     {
         [JsonProperty("henkilo")]

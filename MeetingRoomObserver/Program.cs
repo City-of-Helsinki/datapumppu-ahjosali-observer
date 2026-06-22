@@ -10,8 +10,16 @@ using System.Runtime.CompilerServices;
 
 namespace MeetingRoomObserver
 {
+    /// <summary>
+    /// Application entry point. Configures the ASP.NET Core host, dependency injection,
+    /// HTTP pipeline, health checks, and the <c>POST /observer</c> endpoint.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Builds and runs the ASP.NET Core web application.
+        /// </summary>
+        /// <param name="args">Command-line arguments.</param>
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);

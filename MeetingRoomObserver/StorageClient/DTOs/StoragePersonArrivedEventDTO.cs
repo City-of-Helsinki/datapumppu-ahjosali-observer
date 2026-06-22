@@ -1,5 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
+    /// <summary>
+    /// Storage event DTO indicating that a person has arrived at the meeting, with their name, seat, and additional info in Finnish and Swedish.
+    /// </summary>
     public class StoragePersonArrivedEventDTO : StorageEventDTO
     {
         public StoragePersonArrivedEventDTO()

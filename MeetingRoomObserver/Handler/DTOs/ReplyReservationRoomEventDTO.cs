@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents a reply reservation (vastauspuheenvuorovaraus) event from the Ahjo system.
+    /// </summary>
     public class ReplyReservationRoomEventDTO : EventDTO
     {
         [JsonProperty("henkilo")]

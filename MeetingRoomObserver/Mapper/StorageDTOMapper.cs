@@ -7,11 +7,25 @@ using Newtonsoft.Json;
 
 namespace MeetingRoomObserver.Mapper
 {
+    /// <summary>
+    /// Transforms parsed Ahjo meeting event lists into normalized storage DTOs.
+    /// </summary>
     public interface IStorageDTOMapper
     {
+        /// <summary>
+        /// Maps a parsed <see cref="MeetingEventList"/> into a list of <see cref="StorageEventDTO"/> objects,
+        /// resolving the storage meeting identifier via the storage REST API.
+        /// </summary>
+        /// <param name="meetingEventList">The parsed meeting event list from the Ahjo system.</param>
+        /// <returns>A list of normalized storage event DTOs ready for publishing.</returns>
         Task<List<StorageEventDTO>> MapToStorageDTOs(MeetingEventList? meetingEventList);
     }
 
+    /// <summary>
+    /// Orchestrates the transformation of Ahjo input DTOs into storage output DTOs using AutoMapper.
+    /// Configures mapping profiles for all 22 event types, resolves meeting IDs via the storage API,
+    /// and caches meeting ID lookups to reduce external API calls.
+    /// </summary>
     public class StorageDTOMapper : IStorageDTOMapper
     {
         private readonly ILogger<StorageDTOMapper>? _logger;
@@ -22,6 +36,15 @@ namespace MeetingRoomObserver.Mapper
         private readonly IStorageApiClient _storageApiClient;
         private readonly Dictionary<string, string> _meetingIdMap = new Dictionary<string, string>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StorageDTOMapper"/> class.
+        /// </summary>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="meetingEventTypeMapper">Maps event type strings to storage event types.</param>
+        /// <param name="voteTypeMapper">Maps vote type strings to integer values.</param>
+        /// <param name="votingTypeMapper">Maps voting type strings to integer values.</param>
+        /// <param name="speechTypeMapper">Maps speech type strings to integer values.</param>
+        /// <param name="storageApiClient">The client used to resolve meeting IDs from the storage API.</param>
         public StorageDTOMapper(
             ILogger<StorageDTOMapper>? logger,
             IMeetingEventTypeMapper meetingEventTypeMapper,

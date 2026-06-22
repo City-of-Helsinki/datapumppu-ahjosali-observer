@@ -3,6 +3,12 @@ using MeetingRoomObserver.Events.Providers;
 
 namespace MeetingRoomObserver.Events
 {
+    /// <summary>
+    /// Background service that continuously consumes meeting room events from the
+    /// Kafka topic configured by <c>KAFKA_CONSUMER_TOPIC</c> and forwards them to
+    /// <see cref="IMeetingMessageHandler"/> for processing.
+    /// Automatically recreates the Kafka consumer on transient failures.
+    /// </summary>
     public class AhjoSaliEventObserver : BackgroundService
     {
         private readonly ILogger<AhjoSaliEventObserver> _logger;
@@ -12,6 +18,15 @@ namespace MeetingRoomObserver.Events
         private readonly IKafkaClientFactory _clientFactory;
         private IMeetingMessageHandler _eventHandler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AhjoSaliEventObserver"/> class.
+        /// </summary>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="serviceProvider">The service provider for scoped dependency resolution.</param>
+        /// <param name="configuration">The application configuration.</param>
+        /// <param name="hostEnvironment">The hosting environment.</param>
+        /// <param name="clientFactory">The factory used to create Kafka consumers.</param>
+        /// <param name="eventHandler">The handler that processes received messages.</param>
         public AhjoSaliEventObserver(
             ILogger<AhjoSaliEventObserver> logger,
             IServiceProvider serviceProvider,
@@ -29,6 +44,7 @@ namespace MeetingRoomObserver.Events
             _eventHandler = eventHandler;
         }
 
+        /// <inheritdoc />
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             return Task.Run(() => MessageHandler(stoppingToken));

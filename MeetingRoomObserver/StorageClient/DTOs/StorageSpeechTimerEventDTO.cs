@@ -1,5 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
+    /// <summary>
+    /// Storage event DTO for speech timer updates, containing speaker, seat, duration, timer value, direction, and additional info.
+    /// </summary>
     public class StorageSpeechTimerEventDTO : StorageEventDTO
     {
         public StorageSpeechTimerEventDTO()

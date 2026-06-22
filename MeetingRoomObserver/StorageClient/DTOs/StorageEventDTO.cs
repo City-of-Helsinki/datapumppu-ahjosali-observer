@@ -1,5 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
+    /// <summary>
+    /// Base storage event DTO containing common fields: meeting ID, event type, timestamp, sequence number, case number, and item number.
+    /// </summary>
     public class StorageEventDTO
     {
         public string MeetingID { get; set; } = string.Empty;
