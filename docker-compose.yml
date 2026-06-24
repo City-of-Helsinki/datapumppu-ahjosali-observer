@@ -1,0 +1,21 @@
+name: datapumppu
+
+services:
+  ahjosali-observer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ahjosali-observer
+    ports:
+      - "8082:80"
+    environment:
+      - KAFKA_BOOTSTRAP_SERVER=shared-kafka:9092 # Kafka docker compose in datapumppu-storage repository
+      - ASPNETCORE_ENVIRONMENT=Development
+      - STORAGE_URL=http://storage-service
+
+    networks:
+      - datapumppu-network
+
+networks:
+  datapumppu-network:
+    external: true
