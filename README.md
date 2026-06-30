@@ -173,13 +173,17 @@ The service will start automatically, map its port to `http://localhost:8082`, a
 ### Configuration
 Environment variables are pre-configured in `docker-compose.yml` to work out-of-the-box. If custom settings are needed, they can be configured via environment variables:
 
-| Variable | Description | Pre-configured Value |
-|----------|-------------|---------|
+| Variable | Description | Pre-configured Value / Default |
+|----------|-------------|--------------------------------|
 | `KAFKA_BOOTSTRAP_SERVER` | Kafka broker address inside the Docker network | `shared-kafka:9092` |
 | `KAFKA_CONSUMER_TOPIC` | Kafka topic to consume raw events from | `ahjosali-topic` |
 | `KAFKA_PRODUCER_TOPIC` | Kafka topic to produce normalized events to | `meeting-room-observer-topic` |
 | `KAFKA_GROUP_ID` | Kafka consumer group identifier | `ahjosali-consumer` |
 | `STORAGE_URL` | Base URL of the Storage API | `http://storage-service` |
+| `KAFKA_USER_USERNAME` | SASL username (production only) | *(secret / required in prod)* |
+| `KAFKA_USER_PASSWORD` | SASL password (production only) | *(secret / required in prod)* |
+| `SSL_CERT_PEM` | PEM-encoded SSL certificate (production only) | *(secret / required in prod)* |
+| `OBSERVER_API_KEY` | Optional API Key for `/observer` POST endpoint protection | *(optional / empty by default)* |
 
 ## API Documentation
 
