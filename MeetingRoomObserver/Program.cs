@@ -24,10 +24,7 @@ namespace MeetingRoomObserver
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-
             builder.Services.AddHealthChecks();
 
             AddDependencyInjections(builder.Services);
@@ -44,52 +41,46 @@ namespace MeetingRoomObserver
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-
-            app.UseRouting();
-            
-            app.UseAuthorization();
-            
-            app.MapPost("/observer", async (context) =>
+            app.MapPost("/observer", async (HttpContext context, IMeetingMessageHandler eventHandler, IConfiguration configuration) =>
             {
+                var apiKey = configuration["OBSERVER_API_KEY"];
+                if (!string.IsNullOrEmpty(apiKey) && context.Request.Headers["X-API-KEY"] != apiKey)
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return;
+                }
+
                 var reader = new StreamReader(context.Request.Body);
                 var data = await reader.ReadToEndAsync();
-                reader.Close();
-
-                var eventHandler = app.Services.GetService<IMeetingMessageHandler>();
-                await eventHandler!.HandleMessage(data);
+                await eventHandler.HandleMessage(data);
             });
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHealthChecks("/healthz");
-                endpoints.MapHealthChecks("/readiness");
-            });
+            app.MapHealthChecks("/healthz");
+            app.MapHealthChecks("/readiness");
 
             app.Run();
         }
 
-        private static void AddDependencyInjections(IServiceCollection servicess)
+        private static void AddDependencyInjections(IServiceCollection services)
         {
-            servicess.AddSingleton<IKafkaClientFactory, KafkaClientFactory>();
-            servicess.AddHostedService<AhjoSaliEventObserver>();
+            services.AddSingleton<IKafkaClientFactory, KafkaClientFactory>();
+            services.AddHostedService<AhjoSaliEventObserver>();
 
-            servicess.AddTransient<IMeetingEventParser, MeetingEventParser>();
-            servicess.AddTransient<IMeetingMessageHandler, MeetingMessageHandler>();
+            services.AddSingleton<IMeetingEventParser, MeetingEventParser>();
+            services.AddSingleton<IMeetingMessageHandler, MeetingMessageHandler>();
 
-            servicess.AddTransient<IMeetingEventTypeMapper, MeetingEventTypeMapper>();
-            servicess.AddTransient<IVoteTypeMapper, VoteTypeMapper>();
-            servicess.AddTransient<IVotingTypeMapper, VotingTypeMapper>();
-            servicess.AddTransient<ISpeechTypeMapper, SpeechTypeMapper>();
+            services.AddSingleton<IMeetingEventTypeMapper, MeetingEventTypeMapper>();
+            services.AddSingleton<IVoteTypeMapper, VoteTypeMapper>();
+            services.AddSingleton<IVotingTypeMapper, VotingTypeMapper>();
+            services.AddSingleton<ISpeechTypeMapper, SpeechTypeMapper>();
             
-            servicess.AddTransient<IStorageDTOMapper, StorageDTOMapper>();
-            servicess.AddTransient<IStorage, Storage>();
+            services.AddSingleton<IStorageDTOMapper, StorageDTOMapper>();
+            services.AddSingleton<IStorage, Storage>();
 
-            servicess.AddTransient<IStorageConnection, StorageConnection>();
-            servicess.AddTransient<IStorageApiClient, StorageApiClient>();
+            services.AddSingleton<IStorageConnection, StorageConnection>();
+            services.AddSingleton<IStorageApiClient, StorageApiClient>();
 
-            servicess.AddTransient<IStorageKafkaClient, StorageKafkaClient>();
-
+            services.AddSingleton<IStorageKafkaClient, StorageKafkaClient>();
         }
     }
 }

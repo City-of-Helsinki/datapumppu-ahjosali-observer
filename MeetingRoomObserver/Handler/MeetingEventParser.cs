@@ -69,12 +69,14 @@ namespace MeetingRoomObserver.Handler
                 return new MeetingEventList();
             }
 
-            string meetingId = eventList.kokous.ToString();
+            var state = GetStateQuery(events);
+
+            string meetingId = (eventList.kokous ?? events.kokous)?.ToString() ?? string.Empty;
             List<EventDTO> parsedEvents = ParseEventList(eventList);
             return new MeetingEventList
             {
                 AttendeesListRoom = GetAttendees(events.lasnaolijat),
-                State = GetStateQuery(events),
+                State = state,
                 MeetingID = meetingId,
                 Events = parsedEvents.Where(meetinEvent => meetinEvent != null).ToList()
             };
@@ -95,7 +97,7 @@ namespace MeetingRoomObserver.Handler
             var stateQuery = events?.tilakysely;
             if (stateQuery == null)
             {
-                throw new Exception("Tilakysely field missing");
+                throw new InvalidDataException("Tilakysely field missing");
             }
 
             return stateQuery.ToObject<StateQueryDTO>();

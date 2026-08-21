@@ -1,11 +1,11 @@
 # Datapumppu Ahjo-Sali Observer
 
-![.NET](https://img.shields.io/badge/.NET-6.0-512BD4)
-![C#](https://img.shields.io/badge/C%23-10-239120)
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4)
+![C#](https://img.shields.io/badge/C%23-14-239120)
 ![Apache Kafka](https://img.shields.io/badge/Apache_Kafka-2.8.0-231F20)
 ![xUnit](https://img.shields.io/badge/xUnit-2.4.2-512BD4)
 
-An ASP.NET Core 6 microservice that consumes meeting room events from the Ahjo municipal decision-making system via Apache Kafka, transforms them into a normalized storage format, and forwards them for persistence in the Datapumppu ecosystem.
+An ASP.NET Core 10 microservice that consumes meeting room events from the Ahjo municipal decision-making system via Apache Kafka, transforms them into a normalized storage format, and forwards them for persistence in the Datapumppu ecosystem.
 
 ## Table of Contents
 
@@ -146,126 +146,44 @@ sequenceDiagram
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| [.NET](https://dotnet.microsoft.com/) | 6.0 | Application framework |
-| [Confluent.Kafka](https://github.com/confluentinc/confluent-kafka-dotnet) | 2.8.0 | Kafka producer and consumer client |
-| [AutoMapper](https://automapper.org/) | 12.0.0 | Object-to-object mapping |
-| [AutoMapper.Extensions.EnumMapping](https://github.com/AutoMapper/AutoMapper.Extensions.EnumMapping) | 3.0.1 | Enum mapping extension for AutoMapper |
+| [.NET](https://dotnet.microsoft.com/) | 10.0 | Application framework |
+| [Confluent.Kafka](https://github.com/confluentinc/confluent-kafka-dotnet) | 2.14.2 | Kafka producer and consumer client |
+| [AutoMapper](https://automapper.org/) | 14.0.0 | Object-to-object mapping |
 | [Newtonsoft.Json](https://www.newtonsoft.com/json) | 13.0.1 | JSON serialization and deserialization |
-| [Azure.Messaging.ServiceBus](https://github.com/Azure/azure-sdk-for-net) | 7.11.0 | Azure Service Bus client (referenced, not actively used) |
+| [Azure.Messaging.ServiceBus](https://github.com/Azure/azure-sdk-for-net) | 7.20.1 | Azure Service Bus client (referenced, not actively used) |
 | [xUnit](https://xunit.net/) | 2.4.2 | Unit testing framework |
 | [Moq](https://github.com/moq/moq4) | 4.18.2 | Mocking framework for tests |
 
-## Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **[.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)** -- Required to build and run the application
-- **[Apache Kafka](https://kafka.apache.org/)** -- Message broker for event consumption and production
-- **[Docker](https://www.docker.com/)** -- Required for containerized deployment (optional for local development)
-
-**Recommended IDEs:**
-- Visual Studio 2022
-- Visual Studio Code with C# extension
-
 ## Getting Started
 
-### Installation
+The Observer is fully containerized and designed to run out-of-the-box using Docker Compose. It integrates seamlessly with the **`datapumppu-storage`** environment, communicating over the shared external Docker network `datapumppu-network` to resolve the Kafka broker (`shared-kafka`) and the Storage Service (`storage-service`).
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd datapumppu-ahjosali-observer
-   ```
+### Prerequisites
+- **[Docker](https://www.docker.com/)** and **Docker Compose** installed.
+- Ensure the `datapumppu-storage` services are already running (which sets up `datapumppu-network`, the shared Kafka broker, and the pre-configured Kafka topics).
 
-2. **Set up Apache Kafka:**
-   ```bash
-   # Ensure Kafka is running locally on port 9092
-   # Create the required topics:
-   kafka-topics.sh --create --topic ahjosali-topic --bootstrap-server localhost:9092
-   kafka-topics.sh --create --topic meeting-room-observer-topic --bootstrap-server localhost:9092
-   ```
+### Running with Docker Compose
+To build and start the Observer, navigate to the repository root and run:
+```bash
+docker-compose up --build -d
+```
 
-3. **Restore dependencies:**
-   ```bash
-   dotnet restore
-   ```
+The service will start automatically, map its port to `http://localhost:8082`, and connect to `shared-kafka:9092` and `http://storage-service` out-of-the-box.
 
 ### Configuration
+Environment variables are pre-configured in `docker-compose.yml` to work out-of-the-box. If custom settings are needed, they can be configured via environment variables:
 
-Configure the application using environment variables or `appsettings.Development.json`:
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `KAFKA_BOOTSTRAP_SERVER` | Kafka broker address | `localhost:9092` |
-| `KAFKA_CONSUMER_TOPIC` | Kafka topic to consume events from | `ahjosali-topic` |
-| `KAFKA_PRODUCER_TOPIC` | Kafka topic to produce events to | `meeting-room-observer-topic` |
+| Variable | Description | Pre-configured Value / Default |
+|----------|-------------|--------------------------------|
+| `KAFKA_BOOTSTRAP_SERVER` | Kafka broker address inside the Docker network | `shared-kafka:9092` |
+| `KAFKA_CONSUMER_TOPIC` | Kafka topic to consume raw events from | `ahjosali-topic` |
+| `KAFKA_PRODUCER_TOPIC` | Kafka topic to produce normalized events to | `meeting-room-observer-topic` |
 | `KAFKA_GROUP_ID` | Kafka consumer group identifier | `ahjosali-consumer` |
-| `KAFKA_USER_USERNAME` | SASL username (production only) | *(secret)* |
-| `KAFKA_USER_PASSWORD` | SASL password (production only) | *(secret)* |
-| `SSL_CERT_PEM` | PEM-encoded SSL certificate (production only) | *(secret)* |
-| `STORAGE_URL` | Base URL for the storage REST API | `http://localhost:5000` |
-
-**Example `appsettings.Development.json`:**
-```json
-{
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
-  "KAFKA_BOOTSTRAP_SERVER": "localhost:9092",
-  "KAFKA_PRODUCER_TOPIC": "meeting-room-observer-topic",
-  "KAFKA_CONSUMER_TOPIC": "ahjosali-topic",
-  "KAFKA_GROUP_ID": "ahjosali-consumer"
-}
-```
-
-### Running Locally
-
-1. **Ensure prerequisites are running** (Kafka, Storage API).
-
-2. **Build the solution:**
-   ```bash
-   dotnet build
-   ```
-
-3. **Run the application:**
-   ```bash
-   dotnet run --project MeetingRoomObserver
-   ```
-
-The application will start on `http://localhost:8080` by default.
-
-**Verify the application is running:**
-```bash
-curl http://localhost:8080/healthz
-# Expected: Healthy
-```
-
-> **Note:** The background Kafka consumer starts automatically on application startup and begins polling the configured consumer topic.
-
-### Docker Setup
-
-**Build Docker image:**
-```bash
-docker build -t datapumppu-ahjosali-observer:latest .
-```
-
-**Run container:**
-```bash
-docker run -d \
-  --name ahjosali-observer \
-  -p 8080:8080 \
-  -e KAFKA_BOOTSTRAP_SERVER="localhost:9092" \
-  -e KAFKA_CONSUMER_TOPIC="ahjosali-topic" \
-  -e KAFKA_PRODUCER_TOPIC="meeting-room-observer-topic" \
-  -e KAFKA_GROUP_ID="ahjosali-consumer" \
-  -e STORAGE_URL="http://host.docker.internal:5000" \
-  datapumppu-ahjosali-observer:latest
-```
-
-> **Tip:** Use `host.docker.internal` to connect to services running on the Docker host machine.
+| `STORAGE_URL` | Base URL of the Storage API | `http://storage-service` |
+| `KAFKA_USER_USERNAME` | SASL username (production only) | *(secret / required in prod)* |
+| `KAFKA_USER_PASSWORD` | SASL password (production only) | *(secret / required in prod)* |
+| `SSL_CERT_PEM` | PEM-encoded SSL certificate (production only) | *(secret / required in prod)* |
+| `OBSERVER_API_KEY` | Optional API Key for `/observer` POST endpoint protection | *(optional / empty by default)* |
 
 ## API Documentation
 
