@@ -207,7 +207,7 @@ The Ahjo-Sali Observer provides a minimal HTTP API alongside its primary Kafka-b
 **Example Request:**
 ```bash
 # Submit an event directly via HTTP
-curl -X POST http://localhost:8080/observer \
+curl -X POST http://localhost:8082/observer \
   -H "Content-Type: application/json" \
   -d '{"tapahtumalista": { ... }}'
 ```
