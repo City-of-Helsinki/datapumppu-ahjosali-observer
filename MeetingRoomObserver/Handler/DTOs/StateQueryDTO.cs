@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents the current state of the meeting, including titles in Finnish and Swedish, case and item numbers, and the last sequence number.
+    /// </summary>
     public class StateQueryDTO
     {
         [JsonProperty("kokousotsikko")]

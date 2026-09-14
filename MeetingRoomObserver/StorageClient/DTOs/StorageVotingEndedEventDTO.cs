@@ -1,5 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
+    /// <summary>
+    /// Storage event DTO indicating that voting has ended, containing vote counts, voting type, aye/nay texts and titles in Finnish and Swedish, and the individual votes.
+    /// </summary>
     public class StorageVotingEndedEventDTO : StorageEventDTO
     {
         public StorageVotingEndedEventDTO()

@@ -2,24 +2,46 @@ using Confluent.Kafka;
 
 namespace MeetingRoomObserver.Events.Providers
 {
+    /// <summary>
+    /// Factory for creating Kafka producer and consumer clients.
+    /// </summary>
     public interface IKafkaClientFactory
     {
+        /// <summary>
+        /// Creates a new Kafka producer for publishing string messages.
+        /// </summary>
+        /// <returns>A configured <see cref="IProducer{TKey,TValue}"/> instance.</returns>
         public IProducer<Null, string> CreateProducer();
 
+        /// <summary>
+        /// Creates a new Kafka consumer for reading string messages.
+        /// </summary>
+        /// <returns>A configured <see cref="IConsumer{TKey,TValue}"/> instance.</returns>
         public IConsumer<Null, string> CreateConsumer();
     }
 
+    /// <summary>
+    /// Creates Kafka producer and consumer clients using configuration values.
+    /// In development, uses plain TCP connections. In production, configures
+    /// SASL-SCRAM-SHA-512 authentication with PEM SSL certificates.
+    /// </summary>
     public class KafkaClientFactory : IKafkaClientFactory
     {
         private readonly IConfiguration _configuration;
         private IHostEnvironment _hostEnvironment;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KafkaClientFactory"/> class.
+        /// </summary>
+        /// <param name="hostEnvironment">The hosting environment, used to determine SSL/SASL configuration.</param>
+        /// <param name="configuration">The application configuration containing Kafka connection settings.</param>
         public KafkaClientFactory(IHostEnvironment hostEnvironment, IConfiguration configuration)
         {
             _configuration = configuration;
             _hostEnvironment = hostEnvironment;
         }
 
+        /// <inheritdoc />
         public IProducer<Null, string> CreateProducer()
         {
             var config = CreateProducerConfiguration();
@@ -27,6 +49,7 @@ namespace MeetingRoomObserver.Events.Providers
             return new ProducerBuilder<Null, string>(config).Build();
         }
 
+        /// <inheritdoc />
         public IConsumer<Null, string> CreateConsumer()
         {
             var config = CreateConsumerConfiguration();

@@ -1,5 +1,9 @@
 ﻿namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Defines constant strings for all 22 Ahjo meeting room event types in Finnish.
+    /// These values correspond to the "laji" field in the Ahjo JSON payload.
+    /// </summary>
     public class EventTypeDTOConstants
     {
         public const string MeetingStarts = "kokous alkaa";
