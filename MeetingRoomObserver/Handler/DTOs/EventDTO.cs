@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Base class for all Ahjo meeting room events, containing the sequence number, timestamp, and event type.
+    /// </summary>
     public class EventDTO
     {
         [JsonProperty("snro")]

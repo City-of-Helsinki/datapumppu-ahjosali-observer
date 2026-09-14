@@ -5,11 +5,23 @@ using Newtonsoft.Json;
 
 namespace MeetingRoomObserver.StorageClient
 {
+    /// <summary>
+    /// Publishes storage event DTOs to an outbound Kafka topic.
+    /// </summary>
     public interface IStorageKafkaClient
     {
+        /// <summary>
+        /// Serializes and sends the given storage event to the configured Kafka producer topic.
+        /// </summary>
+        /// <param name="storageEventDTO">The storage event to publish.</param>
         Task SendEvent(StorageEventDTO storageEventDTO);
     }
 
+    /// <summary>
+    /// Produces serialized <see cref="StorageEventDTO"/> messages to the Kafka topic
+    /// specified by the <c>KAFKA_PRODUCER_TOPIC</c> configuration key.
+    /// Lazily creates and reuses a single <see cref="IProducer{TKey,TValue}"/> instance.
+    /// </summary>
     public class StorageKafkaClient : IStorageKafkaClient
     {
         private readonly IConfiguration _configuration;
@@ -17,6 +29,12 @@ namespace MeetingRoomObserver.StorageClient
         private IKafkaClientFactory _clientFactory;
         private IProducer<Null, string>? _producer = null;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StorageKafkaClient"/> class.
+        /// </summary>
+        /// <param name="configuration">The application configuration.</param>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="clientFactory">The factory used to create Kafka producers.</param>
         public StorageKafkaClient(
             IConfiguration configuration,
             ILogger<StorageKafkaClient> logger,
@@ -27,6 +45,7 @@ namespace MeetingRoomObserver.StorageClient
             _clientFactory = clientFactory;
         }
 
+        /// <inheritdoc />
         public async Task SendEvent(StorageEventDTO storageEventDTO)
         {
             _logger.LogInformation("Sending event to Storage");

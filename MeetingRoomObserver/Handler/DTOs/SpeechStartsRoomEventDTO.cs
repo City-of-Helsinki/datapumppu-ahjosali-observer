@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents a "speech starts" event from the Ahjo system, containing the speaker, timing, direction, seat, and speech type.
+    /// </summary>
     public class SpeechStartsRoomEventDTO : EventDTO
     {
         [JsonProperty("henkilo")]

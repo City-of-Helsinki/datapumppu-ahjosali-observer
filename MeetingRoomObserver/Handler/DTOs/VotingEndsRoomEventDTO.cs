@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents a "voting ends" event from the Ahjo system, containing vote counts, voting type, aye/nay texts and titles in Finnish and Swedish, and the individual votes.
+    /// </summary>
     public class VotingEndsRoomEventDTO : EventDTO
     {
         [JsonProperty("jaa")]

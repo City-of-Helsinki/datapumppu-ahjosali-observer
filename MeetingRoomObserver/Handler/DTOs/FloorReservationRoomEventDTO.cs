@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents a floor reservation (speaking turn request) event from the Ahjo system.
+    /// </summary>
     public class FloorReservationRoomEventDTO : EventDTO
     {
         [JsonProperty("henkilo")]

@@ -1,5 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
+    /// <summary>
+    /// Storage event DTO for a reply reservation (vastauspuheenvuorovaraus), with person, ordinal, seat, and additional info.
+    /// </summary>
     public class StorageReplyReservationEventDTO: StorageEventDTO
     {
         public StorageReplyReservationEventDTO()

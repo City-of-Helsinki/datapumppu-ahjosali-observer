@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+		<!--
+			WARNING: Do not upgrade AutoMapper beyond version 14.X without a commercial license.
+			Starting from v15.0.0, AutoMapper transitioned to a commercial dual-license model
+			(Lucky Penny Software) which requires payment for corporate/enterprise usage.
+			Version 14.0.0 is the last fully free, MIT-licensed open-source version.
+		-->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Moq" Version="4.18.2" />
     <PackageReference Include="xunit" Version="2.4.2" />
