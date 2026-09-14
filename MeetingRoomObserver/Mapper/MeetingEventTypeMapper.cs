@@ -5,11 +5,24 @@ using MeetingRoomObserver.StorageClient;
 
 namespace MeetingRoomObserver.Mapper
 {
+    /// <summary>
+    /// Maps Ahjo event type strings to <see cref="StorageEventType"/> enum values.
+    /// </summary>
     public interface IMeetingEventTypeMapper
     {
+        /// <summary>
+        /// Maps a Finnish event type string to its corresponding <see cref="StorageEventType"/>.
+        /// </summary>
+        /// <param name="meetingEventType">The Ahjo event type string (e.g. "kokous alkaa").</param>
+        /// <returns>The corresponding <see cref="StorageEventType"/> enum value.</returns>
+        /// <exception cref="NotSupportedException">Thrown when the event type is not recognized.</exception>
         StorageEventType MapToMeetingEventType(string? meetingEventType);
     }
 
+    /// <summary>
+    /// Maps 22 Finnish Ahjo event type strings to <see cref="StorageEventType"/> enum values
+    /// using a dictionary lookup. Throws <see cref="NotSupportedException"/> for unknown types.
+    /// </summary>
     public class MeetingEventTypeMapper : IMeetingEventTypeMapper
     {
         private readonly Dictionary<string, StorageEventType> _map = new Dictionary<string, StorageEventType>()

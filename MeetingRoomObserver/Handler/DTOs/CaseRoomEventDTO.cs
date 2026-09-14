@@ -2,6 +2,9 @@
 
 namespace MeetingRoomObserver.Handler.DTOs
 {
+    /// <summary>
+    /// Represents a case/agenda item event from the Ahjo system, including case text, proposition, and item details in Finnish and Swedish.
+    /// </summary>
     public class CaseRoomEventDTO : EventDTO
     {
         [JsonProperty("paatosehdotus")]

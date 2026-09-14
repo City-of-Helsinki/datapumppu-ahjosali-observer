@@ -1,5 +1,8 @@
 ﻿namespace MeetingRoomObserver.StorageClient.DTOs
 {
+    /// <summary>
+    /// Represents a proposition for storage, with text in Finnish and Swedish, person, type, and additional info.
+    /// </summary>
     public class StoragePropositionDTO
     {
         public string? TextFI { get; set; } = string.Empty;
